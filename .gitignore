@@ -1,0 +1,55 @@
+#このプロジェクトでは `.gitignore` に従って個人用の設定ファイル（*.launch, .env など）はGit管理しません。
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+*.log
+log/
+logs/
+
+# macOS固有
+.DS_Store
+
+# 環境変数ファイル(今は入れていないが念のため)
+.env
+.env.*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# Spring Boot特有の除外
+# application.properties / application.yml のうち、環境ごとに切り替える設定は必要に応じて除外
+src/main/resources/application-dev.properties
+src/main/resources/application-local.properties
+src/main/resources/application-prod.properties
+*.launch
