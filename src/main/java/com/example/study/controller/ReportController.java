@@ -3,6 +3,7 @@ package com.example.study.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.study.service.ReportService;
 
@@ -23,6 +24,13 @@ public class ReportController {
 		model.addAttribute("reports", reportService.getReportsByUserId(1));
 		
 		return "reports";
-//		return "Hello World!";
 	}
+	
+	/*@PathVariableでGETリクエストのパス{id}を引数で取得する*/
+	@GetMapping("/reports/{id}")
+	public String getReport(@PathVariable Long id,Model model) {
+		
+		return "report-detail";
+	}
+	
 }
