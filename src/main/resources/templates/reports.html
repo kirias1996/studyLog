@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>日報一覧</title>
+</head>
+<body>
+    <h1>学習日報一覧</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>学習日付</th>
+                <th>タイトル</th>
+                <th>内容</th>
+                <th>学習時間（h）</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="report : ${reports}">
+                <td th:text="${report.learningDate}"></td>
+                <td th:text="${report.title}"></td>
+                <td th:text="${report.content}"></td>
+                <td th:text="${report.learningHours}"></td>
+                <td>
+                    <!-- 詳細ボタン -->
+                    <a th:href="@{'/reports/' + ${report.id}}">詳細</a>
+
+                    <!-- 更新ボタン -->
+                    <a th:href="@{'/reports/edit/' + ${report.id}}">更新</a>
+
+                    <!-- 削除ボタン（formでPOST送信） -->
+                    <form th:action="@{'/reports/delete/' + ${report.id}}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 新規作成ボタン -->
+    <p><a href="/reports/create">＋ 新規日報作成</a></p>
+</body>
+</html>
