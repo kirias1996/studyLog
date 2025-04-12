@@ -6,7 +6,10 @@
 </head>
 <body>
     <h1>学習日報一覧</h1>
-
+	
+	<div th:if="${successMessage}" class="alert alert-success" style = "color: blue">
+	  <p th:text="${successMessage}"></p>
+	</div>
     <table border="1">
         <thead>
             <tr>
@@ -44,7 +47,7 @@
 
     <!-- 新規作成ボタン -->
 	<p>
-		<form th:action="@{'/reports/create}" method="get">
+		<form th:action="@{/reports/create}" method="get">
             <button type="submit">新規登録</button>
         </form>
 	</p>
