@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.study.service.ReportService;
 
 @Controller
-//@RequestMapping("/")
 public class ReportController {
 
 	private final ReportService reportService;
@@ -28,8 +27,8 @@ public class ReportController {
 	
 	/*@PathVariableでGETリクエストのパス{id}を引数で取得する*/
 	@GetMapping("/reports/{id}")
-	public String getReport(@PathVariable Long id,Model model) {
-		
+	public String getReport(@PathVariable int id,Model model) {
+		model.addAttribute("report",reportService.getReportById(id));
 		return "report-detail";
 	}
 	

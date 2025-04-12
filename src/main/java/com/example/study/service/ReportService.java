@@ -7,5 +7,7 @@ import com.example.study.entity.Report;
 public interface ReportService {
 
 	List<Report> getReportsByUserId(int userId);
+	
+	Report getReportById(int id);
 
 }
