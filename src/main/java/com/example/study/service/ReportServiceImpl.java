@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.study.entity.Report;
+import com.example.study.exception.ReportNotFoundException;
 import com.example.study.repository.ReportRepository;
 
 @Service
@@ -28,6 +29,12 @@ public class ReportServiceImpl implements ReportService {
 
 		return reportRepository.findByUserId(userId);
 
+	}
+
+	@Override
+	public Report getReportById(int id) {
+		
+		return reportRepository.findById(id).orElseThrow(() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:"+ id + ")"));
 	}
 
 }
