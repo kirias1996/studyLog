@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>日報フォーム</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <h1 th:text="${isEdit} ? '日報編集' : '日報登録'">日報フォーム</h1>
+
+    <form th:action="@{${isEdit} ? '/reports/update' : '/reports'}"
+          th:object="${reportRequestDto}" method="post">
+          
+        <!-- 編集モードの時だけIDをhiddenで渡す -->
+        <input type="hidden" th:if="${isEdit}" th:field="*{id}" />
+
+        <div>
+			<div th:if="${#fields.hasErrors('learningDate')}" th:errors="*{learningDate}" style="color:red"></div>
+            <label>学習日付:</label>
+            <input type="date" th:field="*{learningDate}" required />
+        </div>
+
+<!--        <div>-->
+<!--            <label>技術カテゴリー:</label>-->
+<!--            <select th:field="*{tech}">-->
+<!--                <option value="">-- 選択してください --</option>-->
+<!--                <option th:each="t : ${techList}"-->
+<!--                        th:value="${t}" th:text="${t}"></option>-->
+<!--            </select>-->
+<!--        </div>-->
+		<div>
+			<div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
+            <label>学習概要:</label>
+            <input type="text" th:field="*{title}" required />
+        </div>
+
+        <div>
+			<div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></div>
+            <label>学習内容:</label><br>
+            <textarea th:field="*{content}" rows="5" cols="50" required></textarea><br>
+<!--            <span th:text="'文字数: ' + ${#strings.length(reportForm.content)} + '文字'"></span>-->
+        </div>
+
+        <div>
+			<div th:if="${#fields.hasErrors('learningHours')}" th:errors="*{learningHours}" style="color:red"></div>
+            <label>学習時間(時間)</label>
+			<select id="learningHours" name="learningHours" th:field="*{learningHours}">
+			  <th:block th:each="i : ${#numbers.sequence(0, 23)}">
+			    <option th:value="${i}" th:text="${i}">0</option>
+			  </th:block>
+			</select>
+<!--            <select th:field="*{learningHours}">-->
+<!--                <option th:each="i : ${#numbers.sequence(1, 12)}"-->
+<!--                        th:value="${i}" th:text="${i + ' 時間'}"></option>-->
+<!--            </select>-->
+			<label>学習時間(分)</label>
+			<select id="learningMinutes" name="learningMinutes">
+			  <option value="0">0</option>
+			  <option value="15">15</option>
+			  <option value="30">30</option>
+			  <option value="45">45</option>
+			</select>
+        </div>
+
+        <div>
+            <button type="submit" th:text="${isEdit} ? '更新する' : '登録する'"></button>
+        </div>
+    </form>
+
+	<form th:action="@{/reports}" method="get" style="display: inline; margin-left: 10px;">
+        <button type="submit">一覧に戻る</button>
+    </form>
+</body>
+</html>
