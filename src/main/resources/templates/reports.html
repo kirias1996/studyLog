@@ -24,11 +24,14 @@
                 <td th:text="${report.content}"></td>
                 <td th:text="${report.learningHours}"></td>
                 <td>
-                    <!-- 詳細ボタン -->
-                    <a th:href="@{'/reports/' + ${report.id}}">詳細</a>
-
+					<!-- 詳細ボタン -->
+					<form th:action="@{'/reports/' + ${report.id}}" method="get" style="display:inline;">
+                        <button type="submit">詳細</button>
+                    </form>
                     <!-- 更新ボタン -->
-                    <a th:href="@{'/reports/edit/' + ${report.id}}">更新</a>
+					<form th:action="@{'/reports/edit/' + ${report.id}}" method="get" style="display:inline;">
+                        <button type="submit">更新</button>
+                    </form>
 
                     <!-- 削除ボタン（formでPOST送信） -->
                     <form th:action="@{'/reports/delete/' + ${report.id}}" method="post" style="display:inline;">
@@ -40,6 +43,10 @@
     </table>
 
     <!-- 新規作成ボタン -->
-    <p><a href="/reports/create">＋ 新規日報作成</a></p>
+	<p>
+		<form th:action="@{'/reports/create}" method="get">
+            <button type="submit">新規登録</button>
+        </form>
+	</p>
 </body>
 </html>

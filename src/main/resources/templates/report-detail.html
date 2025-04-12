@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>日報詳細</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <h1>日報詳細</h1>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>日付</th>
+            <td th:text="${report.learningDate}">2025-04-01</td>
+        </tr>
+        <tr>
+            <th>学習概要</th>
+            <td th:text="${report.title}">Java</td>
+        </tr>
+		<tr>
+            <th>学習内容</th>
+            <td th:text="${report.content}">Spring BootのREST APIを学習</td>
+        </tr>
+        <tr>
+            <th>学習時間</th>
+            <td th:text="${report.learningHours}">0h</td>
+        </tr>
+    </table>
+
+    <br />
+
+    <div>
+		<form th:action="@{/reports/edit/{id}(id=${report.id})}" method="get" style="display: inline;">
+	        <button type="submit">編集</button>
+	    </form>
+
+	    <form th:action="@{/reports}" method="get" style="display: inline; margin-left: 10px;">
+	        <button type="submit">一覧に戻る</button>
+	    </form>
+    </div>
+
+    <!-- 削除ボタン -->
+    <form th:action="@{/reports/delete/{id}(id=${report.id})}" method="post" style="margin-top: 10px;">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+    </form>
+</body>
+</html>
