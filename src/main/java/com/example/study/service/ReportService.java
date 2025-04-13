@@ -13,6 +13,9 @@ public interface ReportService {
 	
 	void createReport(ReportRequestDto dto);
 	
+	ReportRequestDto toReportRequestDto(Report report);
+	
+	void updateReport(ReportRequestDto dto);
 	
 
 }

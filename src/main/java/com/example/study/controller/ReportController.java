@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.ReportRequestDto;
+import com.example.study.entity.Report;
 import com.example.study.service.ReportService;
 
 @Controller
@@ -62,5 +64,27 @@ public class ReportController {
 		
 		return "redirect:/reports";
 	}
+	
+	@GetMapping("/reports/edit/{id}")
+	public String showEditForm(@PathVariable int id,Model model) {
+		Report report = reportService.getReportById(id);
+		model.addAttribute("reportRequestDto", reportService.toReportRequestDto(report));
+		model.addAttribute("isEdit", true);
+		
+		return "report-form";
+	}
+	
+	
+	@PutMapping("/reports")
+	public String editReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,RedirectAttributes redirectAttributes) {
+		if (result.hasErrors()) {
+			return "report-form";
+		}
+		reportService.updateReport(dto);
+		redirectAttributes.addFlashAttribute("successMessage","日報の編集が完了しました。");
+		
+		return "redirect:/reports";
+	}
+	
 
 }
