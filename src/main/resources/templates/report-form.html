@@ -7,11 +7,13 @@
 <body>
     <h1 th:text="${isEdit} ? '日報編集' : '日報登録'">日報フォーム</h1>
 
-    <form th:action="@{${isEdit} ? '/reports/update' : '/reports'}"
+    <form th:action="@{${isEdit} ? '/reports' : '/reports'}"
           th:object="${reportRequestDto}" method="post">
-          
-        <!-- 編集モードの時だけIDをhiddenで渡す -->
-        <input type="hidden" th:if="${isEdit}" th:field="*{id}" />
+		<!-- isEdit が true のときだけ PUT 指定の hidden フィールドを出力 -->
+		<input type="hidden" name="_method" value="put" th:if="${isEdit}" />
+				  
+		<!-- 編集モードの時だけIDをhiddenで渡す -->
+		<input type="hidden" th:if="${isEdit}" th:field="*{id}" />
 
         <div>
 			<div th:if="${#fields.hasErrors('learningDate')}" th:errors="*{learningDate}" style="color:red"></div>
@@ -53,7 +55,7 @@
 <!--                        th:value="${i}" th:text="${i + ' 時間'}"></option>-->
 <!--            </select>-->
 			<label>学習時間(分)</label>
-			<select id="learningMinutes" name="learningMinutes">
+			<select id="learningMinutes" name="learningMinutes" th:field="*{learningMinutes}">
 			  <option value="0">0</option>
 			  <option value="15">15</option>
 			  <option value="30">30</option>
@@ -62,7 +64,7 @@
         </div>
 
         <div>
-            <button type="submit" th:text="${isEdit} ? '更新する' : '登録する'"></button>
+            <button type="submit" th:text="${isEdit} ? '編集する' : '登録する'"></button>
         </div>
     </form>
 
