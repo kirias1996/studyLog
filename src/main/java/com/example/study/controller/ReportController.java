@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.ReportRequestDto;
 import com.example.study.entity.Report;
+
 import com.example.study.service.ReportService;
 
 @Controller
@@ -64,7 +66,7 @@ public class ReportController {
 		
 		return "redirect:/reports";
 	}
-	
+
 	@GetMapping("/reports/edit/{id}")
 	public String showEditForm(@PathVariable int id,Model model) {
 		Report report = reportService.getReportById(id);
@@ -85,6 +87,5 @@ public class ReportController {
 		
 		return "redirect:/reports";
 	}
-	
 
 }
