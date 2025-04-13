@@ -6,13 +6,19 @@ import java.util.List;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReportRequestDto {
 
+  private int id;
+	
 	private String title;
 
 	private String content;
 	
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private LocalDate learningDate;
 	
 	@Min(0)
@@ -31,6 +37,14 @@ public class ReportRequestDto {
 		return List.of(0,15,30,45).contains(learningMinutes);
 	}
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getTitle() {
 		return title;
 	}
