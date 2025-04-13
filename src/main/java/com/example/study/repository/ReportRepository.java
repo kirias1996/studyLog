@@ -19,4 +19,8 @@ public interface ReportRepository extends JpaRepository<Report,Integer> {
 	Optional<Report> findById(int id);
 	
 	void save(ReportRequestDto dto);
+	
+	void deleteById(int id);
+	
+	boolean existsById(int id);
 }
