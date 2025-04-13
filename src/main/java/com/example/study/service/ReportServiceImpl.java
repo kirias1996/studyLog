@@ -80,7 +80,8 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public void updateReport(ReportRequestDto dto) {
 		Report report = reportRepository.findById(dto.getId()).orElseThrow(
-				() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:" + dto.getId() + ")"));;
+				() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:" + dto.getId() + ")"));
+		;
 		report.setTitle(dto.getTitle());
 		report.setContent(dto.getContent());
 		report.setLearningDate(dto.getLearningDate());
@@ -91,6 +92,20 @@ public class ReportServiceImpl implements ReportService {
 
 		reportRepository.save(report);
 
+	}
+
+	@Override
+	public void deleteReport(int id) {
+		reportRepository.deleteById(id);
+
+	}
+
+	@Override
+	public boolean existById(int id) {
+		if (!reportRepository.existsById(id)) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -39,7 +39,7 @@
     </div>
 
     <!-- 削除ボタン -->
-    <form th:action="@{/reports/delete/{id}(id=${report.id})}" method="post" style="margin-top: 10px;">
+    <form th:action="@{/reports/{id}(id=${report.id})}" method="post" style="margin-top: 10px;">
         <input type="hidden" name="_method" value="delete" />
         <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
     </form>
