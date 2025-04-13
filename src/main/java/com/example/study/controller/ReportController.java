@@ -64,7 +64,7 @@ public class ReportController {
 		
 		return "redirect:/reports";
 	}
-	
+
 	@GetMapping("/reports/edit/{id}")
 	public String showEditForm(@PathVariable int id,Model model) {
 		Report report = reportService.getReportById(id);
@@ -85,6 +85,5 @@ public class ReportController {
 		
 		return "redirect:/reports";
 	}
-	
 
 }
