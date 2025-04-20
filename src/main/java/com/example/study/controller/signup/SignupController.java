@@ -1,4 +1,4 @@
-package com.example.study.controller;
+package com.example.study.controller.signup;
 
 import jakarta.validation.Valid;
 
@@ -50,6 +50,6 @@ public class SignupController {
 		userService.createUser(dto);
 		redirectAttributes.addFlashAttribute("successMessage", "ユーザ登録が完了しました。");
 		
-		return "redirect:signup";
+		return "redirect:/login";
 	}
 }
