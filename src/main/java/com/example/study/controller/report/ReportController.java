@@ -2,6 +2,7 @@ package com.example.study.controller.report;
 
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,22 +16,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.ReportRequestDto;
 import com.example.study.entity.Report;
+import com.example.study.entity.User;
+import com.example.study.security.CustomUserDetails;
+import com.example.study.security.LoginUserProvider;
 import com.example.study.service.ReportService;
 
 @Controller
 public class ReportController {
 
 	private final ReportService reportService;
+	private final LoginUserProvider loginUserProvider;
 
-	public ReportController(ReportService reportService) {
+	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider) {
 		this.reportService = reportService;
+		this.loginUserProvider = loginUserProvider;
 	}
 
 	@GetMapping("/reports")
-	public String getReports(Model model) {
+	public String getReports(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 
 		/*テスト用にuserId = 1を決め打ちで入れている*/
-		model.addAttribute("reports", reportService.getReportsByUserId(1));
+		User user = loginUserProvider.getLoginUser(userDetails);
+
+		model.addAttribute("reports", reportService.getReportsByUserId(user.getId()));
 
 		return "reports";
 	}
@@ -56,11 +64,11 @@ public class ReportController {
 	 * */
 	@PostMapping("/reports")
 	public String createReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		if (result.hasErrors()) {
 			return "report-form";
 		}
-
+		dto.setUserId(loginUserProvider.getLoginUser(userDetails).getId());
 		reportService.createReport(dto);
 		redirectAttributes.addFlashAttribute("successMessage", "日報の登録が完了しました。");
 
