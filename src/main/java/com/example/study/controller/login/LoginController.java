@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.LoginFormDto;
 import com.example.study.security.CustomUserDetails;
@@ -40,13 +41,19 @@ public class LoginController {
 		if (error != null) {
 			model.addAttribute("errorMessage", "メールアドレス またはパスワードが正しくありません。");
 		}
-		
+
 		// ユーザがログイン済みであればトップ画面に未ログインであればログイン画面に遷移		
 		if (userDetails != null) {
 			return "redirect:/reports";
 		}
-		
+
 		return "auth/login";
+	}
+
+	@GetMapping("/logout-success")
+	public String logoutSuccess(RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("successMessage", "ログアウトしました。");
+		return "redirect:/login";
 	}
 
 	@PostMapping("/login")

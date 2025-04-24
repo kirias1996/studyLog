@@ -7,6 +7,8 @@
 </head>
 
 <body>
+	<header th:replace="header::headerArea"></header>
+	
 	<h1>学習日報一覧</h1>
 
 	<div th:if="${successMessage}" class="alert alert-success" style="color: blue">
