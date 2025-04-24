@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
 </head>
 <body>
+	<header th:replace="header::headerArea"></header>
+	
     <h1 th:text="${isEdit} ? '日報編集' : '日報登録'">日報フォーム</h1>
 
     <form th:action="@{${isEdit} ? '/reports' : '/reports'}"

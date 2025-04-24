@@ -11,7 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReportRequestDto {
 
-  private int id;
+	private int id;
+	
+	private int userId;
 	
 	private String title;
 
@@ -44,6 +46,14 @@ public class ReportRequestDto {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getTitle() {

@@ -2,6 +2,7 @@ package com.example.study.controller.report;
 
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,30 +16,38 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.ReportRequestDto;
 import com.example.study.entity.Report;
+import com.example.study.entity.User;
+import com.example.study.security.CustomUserDetails;
+import com.example.study.security.LoginUserProvider;
 import com.example.study.service.ReportService;
 
 @Controller
 public class ReportController {
 
 	private final ReportService reportService;
+	private final LoginUserProvider loginUserProvider;
 
-	public ReportController(ReportService reportService) {
+	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider) {
 		this.reportService = reportService;
+		this.loginUserProvider = loginUserProvider;
 	}
 
 	@GetMapping("/reports")
-	public String getReports(Model model) {
+	public String getReports(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 
 		/*テスト用にuserId = 1を決め打ちで入れている*/
-		model.addAttribute("reports", reportService.getReportsByUserId(1));
+		User user = loginUserProvider.getLoginUser(userDetails);
+
+		model.addAttribute("reports", reportService.getReportsByUserId(user.getId()));
 
 		return "reports";
 	}
 
 	/*@PathVariableでGETリクエストのパス{id}を引数で取得する*/
 	@GetMapping("/reports/{id}")
-	public String getReport(@PathVariable int id, Model model) {
-		model.addAttribute("report", reportService.getReportById(id));
+	public String getReport(@PathVariable int id, @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+		User user = loginUserProvider.getLoginUser(userDetails);
+		model.addAttribute("report", reportService.getUserOwnedReport(id, user.getId()));
 		return "report-detail";
 	}
 
@@ -56,11 +65,11 @@ public class ReportController {
 	 * */
 	@PostMapping("/reports")
 	public String createReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		if (result.hasErrors()) {
 			return "report-form";
 		}
-
+		dto.setUserId(loginUserProvider.getLoginUser(userDetails).getId());
 		reportService.createReport(dto);
 		redirectAttributes.addFlashAttribute("successMessage", "日報の登録が完了しました。");
 
@@ -68,8 +77,10 @@ public class ReportController {
 	}
 
 	@GetMapping("/reports/edit/{id}")
-	public String showEditForm(@PathVariable int id, Model model) {
-		Report report = reportService.getReportById(id);
+	public String showEditForm(@PathVariable int id, @AuthenticationPrincipal CustomUserDetails userDetails,
+			Model model) {
+		User user = loginUserProvider.getLoginUser(userDetails);
+		Report report = reportService.getUserOwnedReport(id, user.getId());
 		model.addAttribute("reportRequestDto", reportService.toReportRequestDto(report));
 		model.addAttribute("isEdit", true);
 
@@ -77,24 +88,31 @@ public class ReportController {
 	}
 
 	@PutMapping("/reports")
-	public String editReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,
+	public String editReport(@ModelAttribute @Valid ReportRequestDto dto,
+			@AuthenticationPrincipal CustomUserDetails userDetails, BindingResult result,
 			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "report-form";
 		}
-		reportService.updateReport(dto);
+		User user = loginUserProvider.getLoginUser(userDetails);
+
+		reportService.updateReport(dto, user.getId());
 		redirectAttributes.addFlashAttribute("successMessage", "日報の編集が完了しました。");
 
 		return "redirect:/reports";
 	}
 
 	@DeleteMapping("/reports/{id}")
-	public String deleteReport(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
+	public String deleteReport(@PathVariable int id, Model model, RedirectAttributes redirectAttributes,
+			@AuthenticationPrincipal CustomUserDetails userDetails) {
+		User user = loginUserProvider.getLoginUser(userDetails);
+		
 		if (!reportService.existById(id)) {
 			redirectAttributes.addFlashAttribute("errorMessage", "指定された日報が見つかりませんでした。");
 			return "redirect:/reports";
 		}
-		reportService.deleteReport(id);
+		
+		reportService.deleteReport(id, user.getId());
 		redirectAttributes.addFlashAttribute("successMessage", "日報を削除しました。");
 		return "redirect:/reports";
 	}

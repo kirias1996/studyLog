@@ -12,13 +12,15 @@ public interface ReportService {
 
 	Report getReportById(int id);
 
+	public Report getUserOwnedReport(int reportId, int userId);
+
 	void createReport(ReportRequestDto dto);
 
 	ReportRequestDto toReportRequestDto(Report report);
 
-	void updateReport(ReportRequestDto dto);
+	void updateReport(ReportRequestDto dto, int userId);
 
-	void deleteReport(int id);
+	void deleteReport(int reportId,int userId);
 
 	boolean existById(int id);
 }

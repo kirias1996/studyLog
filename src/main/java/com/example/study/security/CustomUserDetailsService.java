@@ -1,7 +1,5 @@
 package com.example.study.security;
 
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Auth auth = authRepository.findByEmail(email)
 			.orElseThrow(()-> new UsernameNotFoundException("ご入力されたメールアドレスは未登録です。"));
 
-		return new User(auth.getEmail(),auth.getPasswordHash(),AuthorityUtils.createAuthorityList(auth.getRole()));
+		return new CustomUserDetails(auth);
 	}
 
 }
