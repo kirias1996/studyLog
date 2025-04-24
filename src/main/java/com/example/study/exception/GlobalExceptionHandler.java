@@ -1,5 +1,6 @@
 package com.example.study.exception;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,12 @@ public class GlobalExceptionHandler {
 	public String handleReportNotFound(ReportNotFoundException ex,Model model) {
 		model.addAttribute("errorMessage", ex.getMessage());
 		return "error/report-not-found";
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public String handleAccessDenied(AccessDeniedException ex,Model model) {
+		model.addAttribute("errorMessage",ex.getMessage());
+		return "error/report-access-deny";
 	}
 	
 }

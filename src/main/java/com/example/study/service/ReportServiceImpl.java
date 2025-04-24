@@ -3,6 +3,7 @@ package com.example.study.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,15 +37,29 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
+	public Report getUserOwnedReport(int reportId, int userId) {
+		Report report = getReportById(reportId);
+		validateOwnership(report, userId);
+		return report;
+	}
+
+	@Override
 	public Report getReportById(int id) {
 
 		return reportRepository.findById(id)
 				.orElseThrow(() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:" + id + ")"));
 	}
 
+	public void validateOwnership(Report report, int userId) {
+		if (report.getUserId() != userId) {
+			throw new AccessDeniedException("他ユーザの日報にはアクセスできません。");
+		}
+	}
+
 	@Transactional
 	public void createReport(ReportRequestDto dto) {
 		Report report = new Report();
+		report.setUserId(dto.getUserId());
 		report.setTitle(dto.getTitle());
 		report.setContent(dto.getContent());
 		report.setLearningDate(dto.getLearningDate());
@@ -55,8 +70,6 @@ public class ReportServiceImpl implements ReportService {
 		report.setUpdatedAt(LocalDateTime.now());
 		report.setCreatedAt(LocalDateTime.now());
 
-		//認証機能が作成できるまではuserId=1で固定
-		report.setUserId(1);
 		//タグ自動登録機能を実装するまではtagId=1で固定
 		report.setTagId(1);
 
@@ -78,10 +91,13 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public void updateReport(ReportRequestDto dto) {
-		Report report = reportRepository.findById(dto.getId()).orElseThrow(
-				() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:" + dto.getId() + ")"));
-		;
+	@Transactional
+	public void updateReport(ReportRequestDto dto, int userId) {
+		// dtoについてはControllerクラスにてバリデーションチェック済み
+		Report report = getReportById(dto.getId());
+
+		validateOwnership(report, userId);
+
 		report.setTitle(dto.getTitle());
 		report.setContent(dto.getContent());
 		report.setLearningDate(dto.getLearningDate());
@@ -95,17 +111,16 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public void deleteReport(int id) {
-		reportRepository.deleteById(id);
+	public void deleteReport(int reportId, int userId) {
+		Report report = getReportById(reportId);
+		validateOwnership(report, userId);
+		reportRepository.delete(report);
 
 	}
 
 	@Override
 	public boolean existById(int id) {
-		if (!reportRepository.existsById(id)) {
-			return false;
-		}
-		return true;
+		return reportRepository.existsById(id);
 	}
 
 }
