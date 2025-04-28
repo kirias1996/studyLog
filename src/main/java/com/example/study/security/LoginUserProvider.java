@@ -15,9 +15,13 @@ public class LoginUserProvider {
 	}
 
 	public User getLoginUser(CustomUserDetails userDetails) {
+		if (userDetails == null) {
+			throw new RuntimeException("認証情報が存在しません。ログイン状態を確認してください。");
+		}
+
 		User user = userRepository.findByAuth(userDetails.getAuth())
 				.orElseThrow(() -> new RuntimeException("ログインユーザが見つかりませんでした。"));
-		
+
 		return user;
 	}
 }

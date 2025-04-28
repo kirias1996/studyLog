@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional
-	public void createUser(UserCreateDto dto) {
+	public void createUser(UserCreateDto dto,String url) {
 		Auth auth = new Auth();
 		auth.setEmail(dto.getEmail());
 		auth.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setAuth(auth);
 		userRepository.save(user);
+		
+		if (user.getIconUrl() == null) {
+			user.setIconUrl(url);
+		}
+		
 	}
 
 	public boolean isPasswordMatch(UserCreateDto dto) {

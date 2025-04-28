@@ -2,6 +2,7 @@ package com.example.study.controller.signup;
 
 import jakarta.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,40 +17,43 @@ import com.example.study.service.UserService;
 @Controller
 public class SignupController {
 	
+	@Value("${app.default-icon-path}")
+	String defaultIconUrl;
+
 	private final UserService userService;
-	
+
 	public SignupController(UserService userService) {
 		this.userService = userService;
 	}
 
-	
 	@GetMapping("/signup")
 	public String showSignupForm(Model model) {
 		model.addAttribute("userCreateDto", new UserCreateDto());
 		return "signup";
 	}
-	
+
 	@PostMapping("/signup")
-	public String processSignup(@Valid  @ModelAttribute("userCreateDto") UserCreateDto dto,BindingResult result ,Model model,RedirectAttributes redirectAttributes) {
-		if(result.hasErrors()) {
+	public String processSignup(@Valid @ModelAttribute("userCreateDto") UserCreateDto dto, BindingResult result,
+			Model model, RedirectAttributes redirectAttributes) {
+		if (result.hasErrors()) {
 			return "signup";
 		}
-		
+
 		//パスワード入力が一致しているかを確認
 		if (!userService.isPasswordMatch(dto)) {
 			model.addAttribute("errorMessage", "パスワードが一致しません。");
-			return "signup";			
+			return "signup";
 		}
-		
+
 		//入力したemailアドレスが登録済みか確認(authテーブルのemailアドレスで検索をかける必要がある)
-		if(userService.isDuplicatedEmail(dto)) {
+		if (userService.isDuplicatedEmail(dto)) {
 			model.addAttribute("errorMessage", "入力されたメールアドレスは登録済みです。");
 			return "signup";
 		}
-		
-		userService.createUser(dto);
+
+		userService.createUser(dto,defaultIconUrl);
 		redirectAttributes.addFlashAttribute("successMessage", "ユーザ登録が完了しました。");
-		
+
 		return "redirect:/login";
 	}
 }
