@@ -4,5 +4,7 @@ import com.example.study.dto.UserProfileDto;
 import com.example.study.entity.User;
 
 public interface UserProfileService {
-	UserProfileDto toUserProfileDto(User user,String email);
+	UserProfileDto toUserProfileDto(User user, String email);
+
+	void updateUserProfile(User user, UserProfileDto dto);
 }

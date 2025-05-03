@@ -1,4 +1,4 @@
-#‚±‚ÌƒvƒƒWƒFƒNƒg‚Å‚Í `.gitignore` ‚É]‚Á‚ÄŒÂl—p‚Ìİ’èƒtƒ@ƒCƒ‹i*.launch, .env ‚È‚Çj‚ÍGitŠÇ—‚µ‚Ü‚¹‚ñB
+#ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½gï¿½Å‚ï¿½ `.gitignore` ï¿½É]ï¿½ï¿½ï¿½ÄŒÂlï¿½pï¿½Ìİ’ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½i*.launch, .env ï¿½È‚Çjï¿½ï¿½Gitï¿½Ç—ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B
 HELP.md
 .gradle
 build/
@@ -9,10 +9,10 @@ build/
 log/
 logs/
 
-# macOSŒÅ—L
+# macOSï¿½Å—L
 .DS_Store
 
-# ŠÂ‹«•Ï”ƒtƒ@ƒCƒ‹(¡‚Í“ü‚ê‚Ä‚¢‚È‚¢‚ª”O‚Ì‚½‚ß)
+# ï¿½Â‹ï¿½ï¿½Ïï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½(ï¿½ï¿½ï¿½Í“ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Oï¿½Ì‚ï¿½ï¿½ï¿½)
 .env
 .env.*
 
@@ -47,9 +47,12 @@ out/
 ### VS Code ###
 .vscode/
 
-# Spring Boot“Á—L‚ÌœŠO
-# application.properties / application.yml ‚Ì‚¤‚¿AŠÂ‹«‚²‚Æ‚ÉØ‚è‘Ö‚¦‚éİ’è‚Í•K—v‚É‰‚¶‚ÄœŠO
+# Spring Bootï¿½ï¿½ï¿½Lï¿½Ìï¿½ï¿½O
+# application.properties / application.yml ï¿½Ì‚ï¿½ï¿½ï¿½ï¿½Aï¿½Â‹ï¿½ï¿½ï¿½ï¿½Æ‚ÉØ‚ï¿½Ö‚ï¿½ï¿½ï¿½İ’ï¿½Í•Kï¿½vï¿½É‰ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½O
 src/main/resources/application-dev.properties
 src/main/resources/application-local.properties
 src/main/resources/application-prod.properties
 *.launch
+
+# ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³
+/upload/*
