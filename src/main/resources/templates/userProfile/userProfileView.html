@@ -5,6 +5,10 @@
     <title>ユーザプロフィール</title>
 </head>
 <body>
+	<div th:if="${successMessage}" class="alert alert-success" style="color: blue">
+		<p th:text="${successMessage}"></p>
+	</div>
+	
     <h1>ユーザプロフィール</h1>
 
     <div>
