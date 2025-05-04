@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ダッシュボード</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<header th:replace="~{header::headerArea}"></header>
+	<div class="wrapper">
+		<div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+		<div class="main">
+		    <div class="summary-item">
+		        <span class="summary-label">日報投稿日数:</span>
+		        <span class="summary-value" th:text="${postCount}">5</span>
+		    </div>
+		    <div class="summary-item">
+		        <span class="summary-label">総合学習時間:</span>
+		        <span class="summary-value" th:text="${totalStudyTime}">10時間</span>
+		    </div>
+		    <div class="summary-item">
+		        <span class="summary-label">連続投稿日数:</span>
+		        <span class="summary-value" th:text="${streakCount}">3日</span>
+		    </div>
+		</div>
+	</div>
+	
+</body>
+
+</html>

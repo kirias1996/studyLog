@@ -79,3 +79,19 @@ table {
     opacity: 1;
     background-color: burlywood;
 }
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.summary-label {
+    font-weight: bold;
+}
+
+.summary-value {
+    font-size: 1.2em;
+}
