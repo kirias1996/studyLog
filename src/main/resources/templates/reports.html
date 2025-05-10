@@ -4,61 +4,68 @@
 <head>
 	<meta charset="UTF-8">
 	<title>日報一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
-	<header th:replace="header::headerArea"></header>
+	<header th:replace="~{header::headerArea}"></header>
+	<div class = "wrapper">
+		<div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+		<div class="main">
+			<h1>学習日報一覧</h1>
+		
+			<div th:if="${successMessage}" class="alert alert-success" style="color: blue">
+				<p th:text="${successMessage}"></p>
+			</div>
+			<div th:if="${errorMessage}" class="alert alert-success" style="color: red">
+				<p th:text="${errorMessage}"></p>
+			</div>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>学習日付</th>
+						<th>タイトル</th>
+						<th>内容</th>
+						<th>学習時間（h）</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="report : ${reports}">
+						<td th:text="${report.learningDate}"></td>
+						<td th:text="${report.title}"></td>
+						<td th:text="${report.content}"></td>
+						<td th:text="${report.learningHours}"></td>
+						<td>
+							<!-- 詳細ボタン -->
+							<form th:action="@{'/reports/' + ${report.id}}" method="get" style="display:inline;">
+								<button type="submit">詳細</button>
+							</form>
+							<!-- 更新ボタン -->
+							<form th:action="@{'/reports/edit/' + ${report.id}}" method="get" style="display:inline;">
+								<button type="submit">編集</button>
+							</form>
+		
+							<!-- 削除ボタン（formでPOST送信） -->
+							<form th:action="@{'/reports/' + ${report.id}}" method="post" style="display:inline;">
+								<input type="hidden" name="_method" value="delete" />
+								<button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+			<!-- 新規作成ボタン -->
+			<div>
+				<form th:action="@{/reports/create}" method="get">
+					<button type="submit">新規登録</button>
+				</form>
+			</div>
+			
+		</div>
+	</div>
 	
-	<h1>学習日報一覧</h1>
-
-	<div th:if="${successMessage}" class="alert alert-success" style="color: blue">
-		<p th:text="${successMessage}"></p>
-	</div>
-	<div th:if="${errorMessage}" class="alert alert-success" style="color: red">
-		<p th:text="${errorMessage}"></p>
-	</div>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>学習日付</th>
-				<th>タイトル</th>
-				<th>内容</th>
-				<th>学習時間（h）</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="report : ${reports}">
-				<td th:text="${report.learningDate}"></td>
-				<td th:text="${report.title}"></td>
-				<td th:text="${report.content}"></td>
-				<td th:text="${report.learningHours}"></td>
-				<td>
-					<!-- 詳細ボタン -->
-					<form th:action="@{'/reports/' + ${report.id}}" method="get" style="display:inline;">
-						<button type="submit">詳細</button>
-					</form>
-					<!-- 更新ボタン -->
-					<form th:action="@{'/reports/edit/' + ${report.id}}" method="get" style="display:inline;">
-						<button type="submit">編集</button>
-					</form>
-
-					<!-- 削除ボタン（formでPOST送信） -->
-					<form th:action="@{'/reports/' + ${report.id}}" method="post" style="display:inline;">
-						<input type="hidden" name="_method" value="delete" />
-						<button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-					</form>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<!-- 新規作成ボタン -->
-	<p>
-	<form th:action="@{/reports/create}" method="get">
-		<button type="submit">新規登録</button>
-	</form>
-	</p>
 </body>
 
 </html>

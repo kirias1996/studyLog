@@ -1,5 +1,6 @@
 package com.example.study.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -121,6 +122,50 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public boolean existById(int id) {
 		return reportRepository.existsById(id);
+	}
+
+	@Override
+	public double getTotalLearningTimes(int userId) {
+		Double result = reportRepository.findTotalLearningTimes(userId);
+
+		if (result == null) {
+			return 0.0;
+		}
+		return result;
+	}
+
+	@Override
+	public int getTotalLearningDays(int userId) {
+		Integer result = reportRepository.findTotalLearningDays(userId);
+		if (result == null) {
+			return 0;
+		}
+
+		return result;
+	}
+
+	@Override
+	public int getConsecutiveLearningDays(int userId) {
+		List<LocalDate> learningDays = reportRepository.findLearningDays(userId);
+
+		if (learningDays.isEmpty()) {
+			return 0;
+		}
+
+		LocalDate prevDate = learningDays.get(0);
+		int consecutiveCount = 1;
+
+		for (int i = 1; i < learningDays.size(); i++) {
+			if (learningDays.get(i).equals(prevDate.minusDays(1))) {
+				consecutiveCount++;
+				prevDate = learningDays.get(i);
+				
+			} else {
+				return consecutiveCount;
+			}
+
+		}
+		return consecutiveCount;
 	}
 
 }

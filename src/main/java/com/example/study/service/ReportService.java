@@ -23,4 +23,10 @@ public interface ReportService {
 	void deleteReport(int reportId,int userId);
 
 	boolean existById(int id);
+	
+	double getTotalLearningTimes(int userId);
+	
+	int getTotalLearningDays(int userId);
+	
+	int getConsecutiveLearningDays(int userId);
 }

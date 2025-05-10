@@ -1,0 +1,97 @@
+header {
+    height: 100px;
+    background-color: #808080;
+    position: relative;
+}
+
+.logout-btn {
+    color: white;
+    border: solid 1px #CCFFFF;
+    border-radius: 10px;
+    padding: 5px;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    text-decoration: none;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+}
+
+.sidebar {
+    width: 220px;
+    height: 600px;
+    background-color: #CCFFFF;
+}
+
+.side-btn {
+    color:black;
+}
+
+.sidebar ul {
+    margin-top: 50px;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.main {
+    height: 600px;
+}
+
+h1 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+table {
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.userProfile {
+	text-align: left;
+}
+
+
+/* 編集ボタン・一覧に戻るボタン・削除ボタン */
+.btn1 {
+    text-align: center;
+}
+
+.btn-style {
+    border: 1px solid #000;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: blanchedalmond;
+    opacity: 0.7;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.5s, background-color 0.5s;
+}
+
+.btn-style:hover {
+    opacity: 1;
+    background-color: burlywood;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.summary-label {
+    font-weight: bold;
+}
+
+.summary-value {
+    font-size: 1.2em;
+}
