@@ -23,14 +23,11 @@
             <input type="date" th:field="*{learningDate}" required />
         </div>
 
-<!--        <div>-->
-<!--            <label>技術カテゴリー:</label>-->
-<!--            <select th:field="*{tech}">-->
-<!--                <option value="">-- 選択してください --</option>-->
-<!--                <option th:each="t : ${techList}"-->
-<!--                        th:value="${t}" th:text="${t}"></option>-->
-<!--            </select>-->
-<!--        </div>-->
+        <div>
+			<div th:if="${#fields.hasErrors('tagName')}" th:errors="*{tagName}" style="color:red"></div>
+            <label>タグ名:</label>
+			<input type="text" th:field="*{tagName}" required />
+        </div>
 		<div>
 			<div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
             <label>学習概要:</label>
