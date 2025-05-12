@@ -89,7 +89,7 @@ public class ReportController {
 
 	@PutMapping("/reports")
 	public String editReport(@ModelAttribute @Valid ReportRequestDto dto,
-			@AuthenticationPrincipal CustomUserDetails userDetails, BindingResult result,
+			BindingResult result, @AuthenticationPrincipal CustomUserDetails userDetails,
 			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "report-form";
@@ -106,12 +106,12 @@ public class ReportController {
 	public String deleteReport(@PathVariable int id, Model model, RedirectAttributes redirectAttributes,
 			@AuthenticationPrincipal CustomUserDetails userDetails) {
 		User user = loginUserProvider.getLoginUser(userDetails);
-		
+
 		if (!reportService.existById(id)) {
 			redirectAttributes.addFlashAttribute("errorMessage", "指定された日報が見つかりませんでした。");
 			return "redirect:/reports";
 		}
-		
+
 		reportService.deleteReport(id, user.getId());
 		redirectAttributes.addFlashAttribute("successMessage", "日報を削除しました。");
 		return "redirect:/reports";

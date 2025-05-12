@@ -3,6 +3,8 @@
 <head>
     <title>日報フォーム</title>
     <meta charset="UTF-8" />
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<script src="/js/suggest.js"></script>
 </head>
 <body>
 	<header th:replace="~{header::headerArea}"></header>
@@ -23,10 +25,13 @@
             <input type="date" th:field="*{learningDate}" required />
         </div>
 
-        <div>
-			<div th:if="${#fields.hasErrors('tagName')}" th:errors="*{tagName}" style="color:red"></div>
-            <label>タグ名:</label>
-			<input type="text" th:field="*{tagName}" required />
+		<div th:if="${#fields.hasErrors('tagName')}" th:errors="*{tagName}" style="color:red"></div>
+        <div class="form-row">
+            <label for="tagInput">タグ名:</label>
+			<div class="suggest-container">
+				<input type="text" id="tagInput" placeholder="タグを入力" th:field="*{tagName}" required />
+				<ul id="suggestionList"></ul>
+			</div>
         </div>
 		<div>
 			<div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
@@ -38,7 +43,6 @@
 			<div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></div>
             <label>学習内容:</label><br>
             <textarea th:field="*{content}" rows="5" cols="50" required></textarea><br>
-<!--            <span th:text="'文字数: ' + ${#strings.length(reportForm.content)} + '文字'"></span>-->
         </div>
 
         <div>
@@ -49,10 +53,6 @@
 			    <option th:value="${i}" th:text="${i}">0</option>
 			  </th:block>
 			</select>
-<!--            <select th:field="*{learningHours}">-->
-<!--                <option th:each="i : ${#numbers.sequence(1, 12)}"-->
-<!--                        th:value="${i}" th:text="${i + ' 時間'}"></option>-->
-<!--            </select>-->
 			<label>学習時間(分)</label>
 			<select id="learningMinutes" name="learningMinutes" th:field="*{learningMinutes}">
 			  <option value="0">0</option>
