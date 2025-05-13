@@ -31,6 +31,8 @@ public class ReportRequestDto {
 
 	private int learningMinutes;
 
+	private double displayLearningTimes;
+
 	private int tagId;
 
 	@NotEmpty(message = "タグ名を入力して下さい")
@@ -45,6 +47,14 @@ public class ReportRequestDto {
 	@AssertTrue(message = "分は0,15,30,45のいずれかを選択してください。")
 	public boolean isValidMinutes() {
 		return List.of(0, 15, 30, 45).contains(learningMinutes);
+	}
+
+	public String capitalizeDisplayTagName() {
+		if (this.tagName == null || this.tagName.isEmpty()) {
+			return "";
+		}
+
+		return this.tagName.substring(0, 1).toUpperCase() + this.tagName.substring(1);
 	}
 
 	public int getId() {
@@ -101,6 +111,14 @@ public class ReportRequestDto {
 
 	public void setLearningMinutes(int learningMinutes) {
 		this.learningMinutes = learningMinutes;
+	}
+
+	public double getDisplayLearningTimes() {
+		return displayLearningTimes;
+	}
+
+	public void setDisplayLearningTimes(double displayLearningTimes) {
+		this.displayLearningTimes = displayLearningTimes;
 	}
 
 	public int getTagId() {

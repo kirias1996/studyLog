@@ -29,7 +29,8 @@
         <div class="form-row">
             <label for="tagInput">タグ名:</label>
 			<div class="suggest-container">
-				<input type="text" id="tagInput" placeholder="タグを入力" th:field="*{tagName}" required />
+				<input type="text" id="tagInput" placeholder="タグを入力" th:field="*{tagName}" 
+				 th:value="${reportRequestDto.capitalizeDisplayTagName()}" required />
 				<ul id="suggestionList"></ul>
 			</div>
         </div>

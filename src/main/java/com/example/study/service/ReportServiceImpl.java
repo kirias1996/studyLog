@@ -121,6 +121,7 @@ public class ReportServiceImpl implements ReportService {
 		reportRequestDto.setLearningDate(report.getLearningDate());
 		reportRequestDto.setLearningHours(TimeConverter.getHour(report.getLearningHours()));
 		reportRequestDto.setLearningMinutes(TimeConverter.getMinute(report.getLearningHours()));
+		reportRequestDto.setDisplayLearningTimes(report.getLearningHours());
 		reportRequestDto.setTagId(report.getTag().getTagId());
 		reportRequestDto.setTagName(report.getTag().getTagName());
 		

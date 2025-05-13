@@ -1,5 +1,7 @@
 package com.example.study.controller.report;
 
+import java.util.List;
+
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,11 +36,12 @@ public class ReportController {
 
 	@GetMapping("/reports")
 	public String getReports(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-
-		/*テスト用にuserId = 1を決め打ちで入れている*/
 		User user = loginUserProvider.getLoginUser(userDetails);
-
-		model.addAttribute("reports", reportService.getReportsByUserId(user.getId()));
+		List<ReportRequestDto> reports = reportService.getReportsByUserId(user.getId())
+				.stream()
+				.map(reportService::toReportRequestDto)
+				.toList();
+		model.addAttribute("reportRequestDto", reports);
 
 		return "reports";
 	}
@@ -47,7 +50,8 @@ public class ReportController {
 	@GetMapping("/reports/{id}")
 	public String getReport(@PathVariable int id, @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 		User user = loginUserProvider.getLoginUser(userDetails);
-		model.addAttribute("report", reportService.getUserOwnedReport(id, user.getId()));
+		Report report = reportService.getUserOwnedReport(id, user.getId());
+		model.addAttribute("reportRequestDto", reportService.toReportRequestDto(report));
 		return "report-detail";
 	}
 
