@@ -95,3 +95,44 @@ table {
 .summary-value {
     font-size: 1.2em;
 }
+
+.suggest-container {
+  position: relative;
+  width: 300px; /* 適宜調整 */
+}
+
+#suggestionList {
+  position: absolute;
+  top: 100%; /* 入力欄のすぐ下に配置 */
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: white;
+  border: none;
+  z-index: 1000;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+#suggestionList li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+#suggestionList li:hover {
+  background-color: #f0f0f0;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.form-row label {
+  margin-right: 8px;
+  min-width: 60px;
+}

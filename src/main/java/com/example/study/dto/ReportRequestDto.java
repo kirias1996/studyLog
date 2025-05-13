@@ -6,40 +6,57 @@ import java.util.List;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReportRequestDto {
 
 	private int id;
-	
+
 	private int userId;
-	
+
 	private String title;
 
 	private String content;
-	
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 
 	private LocalDate learningDate;
-	
+
 	@Min(0)
 	@Max(23)
 	private int learningHours;
-	
+
 	private int learningMinutes;
-	
+
+	private double displayLearningTimes;
+
+	private int tagId;
+
+	@NotEmpty(message = "タグ名を入力して下さい")
+	@Size(max = 20, message = "タグ名は{max}文字以内で入力してください")
+	private String tagName;
+
 	public ReportRequestDto() {
-		
+
 	}
-	
+
 	/*カスタムバリデーション*/
 	@AssertTrue(message = "分は0,15,30,45のいずれかを選択してください。")
 	public boolean isValidMinutes() {
-		return List.of(0,15,30,45).contains(learningMinutes);
+		return List.of(0, 15, 30, 45).contains(learningMinutes);
 	}
-	
+
+	public String capitalizeDisplayTagName() {
+		if (this.tagName == null || this.tagName.isEmpty()) {
+			return "";
+		}
+
+		return this.tagName.substring(0, 1).toUpperCase() + this.tagName.substring(1);
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -47,7 +64,7 @@ public class ReportRequestDto {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getUserId() {
 		return userId;
 	}
@@ -96,5 +113,28 @@ public class ReportRequestDto {
 		this.learningMinutes = learningMinutes;
 	}
 
+	public double getDisplayLearningTimes() {
+		return displayLearningTimes;
+	}
+
+	public void setDisplayLearningTimes(double displayLearningTimes) {
+		this.displayLearningTimes = displayLearningTimes;
+	}
+
+	public int getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(int tagId) {
+		this.tagId = tagId;
+	}
+
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
 
 }

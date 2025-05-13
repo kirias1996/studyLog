@@ -3,16 +3,21 @@ package com.example.study.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.study.dto.ReportRequestDto;
 import com.example.study.entity.Report;
+import com.example.study.entity.Tag;
 import com.example.study.exception.ReportNotFoundException;
 import com.example.study.repository.ReportRepository;
+import com.example.study.repository.TagRepository;
 import com.example.study.util.TimeConverter;
+import com.example.study.validation.ReportTagValidator;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -25,9 +30,11 @@ public class ReportServiceImpl implements ReportService {
 	②依存関係が明確でコードが読みやすくなる
 	③テスト時にモック注入がしやすい*/
 	private final ReportRepository reportRepository;
+	private final TagRepository tagRepository;
 
-	public ReportServiceImpl(ReportRepository reportRepository) {
+	public ReportServiceImpl(ReportRepository reportRepository, TagRepository tagRepository) {
 		this.reportRepository = reportRepository;
+		this.tagRepository = tagRepository;
 	}
 
 	@Override
@@ -59,6 +66,14 @@ public class ReportServiceImpl implements ReportService {
 
 	@Transactional
 	public void createReport(ReportRequestDto dto) {
+		//タグ名を小文字に変換して検索を実施(Java,javaが区別されないようDB登録時にすべて小文字変換して登録しているため)
+		String cleanedTagName = normalizeTagName(dto.getTagName());
+
+		/* Controllerでのバリデーションが適用されないケースに備えた再チェック
+		   例)他のServiceクラスから直接呼び出された場合*/
+		ReportTagValidator.validateTagName(cleanedTagName);
+		Tag tag = getTagForReport(tagRepository.findByTagName(cleanedTagName), cleanedTagName);
+
 		Report report = new Report();
 		report.setUserId(dto.getUserId());
 		report.setTitle(dto.getTitle());
@@ -71,10 +86,29 @@ public class ReportServiceImpl implements ReportService {
 		report.setUpdatedAt(LocalDateTime.now());
 		report.setCreatedAt(LocalDateTime.now());
 
-		//タグ自動登録機能を実装するまではtagId=1で固定
-		report.setTagId(1);
+		//既存のタグ名が見つかれば取得した値をReportクラスにセットし登録
+		report.setTag(tag);
 
 		reportRepository.save(report);
+	}
+
+	private Tag getTagForReport(Tag tag, String cleanedTagName) {
+
+		//タグ名が見つからなければタグ登録を実施&新規登録したレコード情報を再取得
+		if (Objects.isNull(tag)) {
+			Tag newTag = new Tag();
+			newTag.setTagName(cleanedTagName);
+			try {
+				tag = tagRepository.save(newTag);
+			} catch (DataIntegrityViolationException e) {
+				tag = tagRepository.findByTagName(cleanedTagName);
+			}
+		}
+		return tag;
+	}
+
+	private String normalizeTagName(String tagName) {
+		return tagName.trim().toLowerCase();
 	}
 
 	@Override
@@ -87,21 +121,28 @@ public class ReportServiceImpl implements ReportService {
 		reportRequestDto.setLearningDate(report.getLearningDate());
 		reportRequestDto.setLearningHours(TimeConverter.getHour(report.getLearningHours()));
 		reportRequestDto.setLearningMinutes(TimeConverter.getMinute(report.getLearningHours()));
-
+		reportRequestDto.setDisplayLearningTimes(report.getLearningHours());
+		reportRequestDto.setTagId(report.getTag().getTagId());
+		reportRequestDto.setTagName(report.getTag().getTagName());
+		
 		return reportRequestDto;
 	}
 
 	@Override
 	@Transactional
 	public void updateReport(ReportRequestDto dto, int userId) {
+		String cleanedTagName = normalizeTagName(dto.getTagName());
+		ReportTagValidator.validateTagName(cleanedTagName);
 		// dtoについてはControllerクラスにてバリデーションチェック済み
 		Report report = getReportById(dto.getId());
-
 		validateOwnership(report, userId);
+
+		Tag tag = getTagForReport(tagRepository.findByTagName(cleanedTagName), cleanedTagName);
 
 		report.setTitle(dto.getTitle());
 		report.setContent(dto.getContent());
 		report.setLearningDate(dto.getLearningDate());
+		report.setTag(tag);
 
 		//〇時間〇分→〇.〇hに変換して設定(DB定義に合わせるため)
 		report.setLearningHours(dto.getLearningHours() + (dto.getLearningMinutes() / MINUTES_PER_HOUR));
@@ -159,7 +200,7 @@ public class ReportServiceImpl implements ReportService {
 			if (learningDays.get(i).equals(prevDate.minusDays(1))) {
 				consecutiveCount++;
 				prevDate = learningDays.get(i);
-				
+
 			} else {
 				return consecutiveCount;
 			}
