@@ -1,10 +1,7 @@
 package com.example.study.service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,26 +9,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.study.dto.UserProfileDto;
 import com.example.study.entity.User;
 import com.example.study.repository.UserRepository;
+import com.example.study.util.CloudinaryParamsHelper;
+import com.example.study.util.InputValidator;
 
 @Service
-public class UserProfileServiceImpl implements UserProfileService {
+public class UserProfileServiceImpl implements UserProfileService, ImageService {
 
 	@Value("${app.default-icon-path}")
 	String defaultIconUrl;
 
 	private final UserRepository userRepository;
+	private final Cloudinary cloudinary;
 
-	public UserProfileServiceImpl(UserRepository userRepository) {
+	public UserProfileServiceImpl(UserRepository userRepository, Cloudinary cloudinary) {
 		this.userRepository = userRepository;
+		this.cloudinary = cloudinary;
 	}
 
 	@Override
 	public UserProfileDto toUserProfileDto(User user, String email) {
 		UserProfileDto dto = new UserProfileDto();
-
 		dto.setEmail(email);
 		dto.setUserName(user.getUserName());
 		dto.setProfileText(user.getProfileText());
@@ -42,6 +44,8 @@ public class UserProfileServiceImpl implements UserProfileService {
 			dto.setIconUrl(user.getIconUrl());
 			dto.setDefaultIcon(user.getIconUrl().equals(defaultIconUrl));
 		}
+		dto.setIconPublicId(user.getIconPublicId());
+		dto.setIconUrl(user.getIconUrl());
 
 		return dto;
 	}
@@ -49,49 +53,71 @@ public class UserProfileServiceImpl implements UserProfileService {
 	/*
 	 * Controllerクラスでuserのnullチェック,dtoのバリデーションチェック済みのため
 	 * Serviceクラスではチェック処理は実施しない
+	 * 新規画像がアップロードされなかった場合は既存画像(iconPublicId)を保持する
+	 * デフォルトアイコン使用時はiconPublicIdがnullであることを想定
 	 * */
 	@Override
 	@Transactional
 	public void updateUserProfile(User user, UserProfileDto dto) {
-		String uploadFilePath = null;
-		String baseFilePath = System.getProperty("user.dir");
+		Map<String, Object> result = null;
+		String newPublicId = null;
 		try {
-			if (dto.getIconImage() != null && !dto.getIconImage().isEmpty()) {
-				uploadFilePath = saveIconImage(dto.getIconImage());
-				user.setIconUrl(uploadFilePath);
-
+			if (!InputValidator.isNotEmpty(dto.getIconImage())) {
+				return;
 			}
+			newPublicId = "user_" + user.getId() + "_" + UUID.randomUUID();
+			Map<String, Object> optionParameters = CloudinaryParamsHelper.defaultParams(newPublicId);
+			result = upload(dto.getIconImage(), optionParameters);
+			user.setIconUrl(result.get("secure_url").toString());
+			user.setIconPublicId(newPublicId);
 			user.setUserName(dto.getUserName());
 			user.setProfileText(dto.getProfileText());
 			userRepository.save(user);
+
+			if (shouldDeleteOldIcon(dto)) {
+				deleteFile(dto.getIconPublicId());
+			}
+
 		} catch (Exception e) {
+
 			//DB更新失敗時に保存済みアップロードファイルを削除
-			if (uploadFilePath != null) {
-				deleteFile(baseFilePath + uploadFilePath);
+			//String resultPublicId = (String) result.get("public_id");
+			if (InputValidator.isNotBlank(newPublicId)) {
+				deleteFile(newPublicId);
 			}
 
 			throw new RuntimeException("プロフィール更新に失敗しました。");
 		}
 	}
 
+	private boolean shouldDeleteOldIcon(UserProfileDto dto) {
+		return InputValidator.isNotBlank(dto.getIconPublicId())
+				&& !dto.isDefaultIcon()
+				&& InputValidator.isNotEmpty(dto.getIconImage());
+	}
+
 	/*
 	 * アイコン画像の保存に失敗したときにはユーザの想定しないアイコン画像が表示される可能性があるため
 	 * エラー画面に遷移させる。
 	 * */
-	private String saveIconImage(MultipartFile file) throws IOException {
-		String uploadDir = System.getProperty("user.dir") + "/upload/";
-		String fileName = UUID.randomUUID().toString() + file.getOriginalFilename();
-		Path filePath = Paths.get(uploadDir, fileName);
-		Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-		return "/upload/" + fileName;
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> upload(MultipartFile file, Map<String, Object> param) throws IOException {
+		return cloudinary.uploader().upload(file.getBytes(), param);
 	}
 
-	private void deleteFile(String filePath) {
+	@Override
+	public void deleteFile(String publicId) {
 		try {
-			Path path = Paths.get(filePath);
-			Files.deleteIfExists(path);
+			/*
+			 * destoryに第2引数でObjectUtils.emptyMap()を指定している理由
+			 * destoryメソッドはオーバーロードされておらず2つの引数指定が必須
+			 * ObjectUtils.emptyMap()を指定することで空のMapが作られる。
+			 * 追加オプションなしであることを明示するために渡している。
+			 * */
+			cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 		} catch (IOException e) {
-			System.err.println("ファイル削除に失敗しました。:" + filePath);
+			System.err.println("ファイル削除に失敗しました。:");
 		}
 	}
 }

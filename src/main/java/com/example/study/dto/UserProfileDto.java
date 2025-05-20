@@ -21,6 +21,8 @@ public class UserProfileDto {
 	
 	private MultipartFile iconImage;
 	
+	private String iconPublicId;
+	
 	private boolean defaultIcon;
 	
 	public UserProfileDto() {
@@ -64,6 +66,14 @@ public class UserProfileDto {
 
 	public void setIconImage(MultipartFile iconImage) {
 		this.iconImage = iconImage;
+	}
+
+	public String getIconPublicId() {
+		return iconPublicId;
+	}
+
+	public void setIconPublicId(String iconPublicId) {
+		this.iconPublicId = iconPublicId;
 	}
 
 	public boolean isDefaultIcon() {

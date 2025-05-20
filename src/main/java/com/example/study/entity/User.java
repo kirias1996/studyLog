@@ -39,6 +39,10 @@ public class User {
 	@Size(max = 255)
 	@Column(name = "icon_url")
 	private String iconUrl;
+	
+	@Size(max = 255)
+	@Column(name = "icon_public_id")
+	private String iconPublicId;
 
 	@Column(name = "created_at", insertable = true, updatable = false)
 	private LocalDateTime createdAt;
@@ -104,6 +108,14 @@ public class User {
 
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
+	}
+
+	public String getIconPublicId() {
+		return iconPublicId;
+	}
+
+	public void setIconPublicId(String iconPublicId) {
+		this.iconPublicId = iconPublicId;
 	}
 
 	public LocalDateTime getCreatedAt() {

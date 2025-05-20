@@ -35,8 +35,8 @@ public class UserProfileValidator implements Validator {
 
 	private void validateFileExtension(MultipartFile file, Errors errors) {
 		/*(?i)で大文字/小文字を区別しない正規表現マッチングを適用*/
-		if (file.getOriginalFilename() != null || !file.isEmpty()
-				|| !file.getOriginalFilename().matches("(?i)^.+\\.(png|jpg|jpeg)$")) {
+		if (file.getOriginalFilename() != null && !file.isEmpty()
+				&& !file.getOriginalFilename().matches("(?i)^.+\\.(png|jpg|jpeg)$")) {
 			errors.rejectValue("iconImage", "file.invalid", "対応していないファイル形式です。PNGまたはJPG形式の画像を指定してください。");
 		}
 	}

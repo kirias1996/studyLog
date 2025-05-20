@@ -19,6 +19,7 @@
 		        <!-- プロフィール画像 -->
 		        <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
 		    </div>
+			<input type="hidden" name="iconPublicId" th:value="${userProfile.iconPublicId}" />
 		
 		    <div>
 		        <p><strong>ユーザ名：</strong> <span th:text="${userProfile.userName}">ユーザ名</span></p>
