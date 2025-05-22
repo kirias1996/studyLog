@@ -51,7 +51,6 @@ out/
 # application.properties / application.yml �̂����A�����Ƃɐ؂�ւ���ݒ�͕K�v�ɉ����ď��O
 src/main/resources/application-dev.properties
 src/main/resources/application-local.properties
-src/main/resources/application-prod.properties
 *.launch
 
 # アプリケーション
