@@ -2,4 +2,4 @@
 nixPkgs = ['jdk21']
 
 [start]
-cmd = "java -jar build/libs/StudyLog.jar --spring.profiles.active=prod"
+cmd = "bash -c 'source .env && java -jar build/libs/StudyLog.jar --spring.profiles.active=prod'"
