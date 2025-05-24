@@ -10,8 +10,8 @@ cmds = [
   "echo \"CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET\" >> .env",
   "echo \"CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME\" >> .env",
   "echo \"CLOUDINARY_URL=cloudinary://$CLOUDINARY_API_KEY:$CLOUDINARY_API_SECRET@$CLOUDINARY_CLOUD_NAME\" >> .env",
-  chmod +x ./scripts/start.sh
+  "chmod +x ./scripts/start.sh"
 ]
 
 [start]
-cmd = ./scripts/start.sh
+cmd = "./scripts/start.sh"
