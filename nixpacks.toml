@@ -3,7 +3,9 @@ nixPkgs = ['jdk21']
 
 [phases.build]
 cmds = [
-  "cp .env.sample .env"
+  "echo \"TEST=${{ TEST }}\" > test.txt",
+  "echo \"DB_USERNAME={{ TEST }}\" >> test.txt"
+  "cat test.txt"
 ]
 
 [start]
