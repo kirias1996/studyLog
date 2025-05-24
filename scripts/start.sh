@@ -1,7 +1,11 @@
 #!/bin/bash
-set -eu
+set -e
 
+echo "[start.sh] 環境変数TEST確認"
+echo "[DEBUG] TEST (printenv) = $(printenv TEST)"
 echo "[start.sh] 変数表示&ファイル出力"
+echo "${TEST}"
+echo "[start.sh] 変数表示&ファイル出力2"
 echo "$TEST"
 echo "$TEST" > test.txt
 cat test.txt
