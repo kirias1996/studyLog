@@ -1,5 +1,10 @@
 [phases.setup]
 nixPkgs = ['jdk21']
 
+[phases.build]
+cmds = [
+  "cp .env.sample .env"
+]
+
 [start]
 cmd = "bash ./scripts/start.sh"
