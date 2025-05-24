@@ -2,4 +2,9 @@
 nixPkgs = ['jdk21']
 
 [start]
-cmd = "bash ./scripts/start.sh"
+cmds = [
+  "echo \"TEST=$TEST\",
+  "echo \"TEST=$TEST\" > .env",
+  "cat .env",
+  "bash ./scripts/start.sh"
+]
