@@ -16,6 +16,10 @@ logs/
 .env
 .env.*
 
+# ただし .env.sample は除外（追跡対象にする）
+!.env.sample
+
+
 ### STS ###
 .apt_generated
 .classpath
