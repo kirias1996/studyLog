@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eux
 
 echo "[start.sh] 開始：環境変数を読み込みます..."
 source .env
