@@ -1,12 +1,5 @@
 [phases.setup]
 nixPkgs = ['jdk21']
 
-[phases.build]
-cmds = [
-  "echo \"TEST={{ TEST }}\" > test.txt",
-  "echo \"DB_USERNAME={{ TEST }}\" >> test.txt",
-  "cat test.txt"
-]
-
 [start]
 cmd = "bash ./scripts/start.sh"
