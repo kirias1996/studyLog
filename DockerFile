@@ -1,0 +1,14 @@
+# 1. Java 21 ベースイメージを使用（Eclipse Temurin）
+FROM eclipse-temurin:21-jdk
+
+#  2. 作業ディレクトリを /app に設定
+WORKDIR /app
+
+#  3. プロジェクト全体をコンテナにコピー
+COPY . /app
+
+#  4. gradlew に実行権限を付与し、JAR をビルド（テスト・チェックはスキップ）
+RUN chmod +x ./gradlew && ./gradlew bootJar -x test -x check
+
+#  5. アプリ実行コマンド（適宜 JAR ファイル名は調整）
+CMD ["java", "-jar", "build/libs/StudyLog.jar", "--spring.profiles.active=prod"]
