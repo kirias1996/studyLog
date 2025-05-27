@@ -1,44 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>ユーザプロフィール</title>
-	<link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-	<div class="wrapper">
-		<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-		<div class="main">
-			<div th:if="${successMessage}" class="alert alert-success" style="color: blue">
-				<p th:text="${successMessage}"></p>
-			</div>
-			
-		    <h1 class="userProfile">ユーザプロフィール</h1>
-		
-		    <div>
-		        <!-- プロフィール画像 -->
-		        <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
-		    </div>
-			<input type="hidden" name="iconPublicId" th:value="${userProfile.iconPublicId}" />
-		
-		    <div>
-		        <p><strong>ユーザ名：</strong> <span th:text="${userProfile.userName}">ユーザ名</span></p>
-		        <p><strong>メールアドレス：</strong> <span th:text="${userProfile.email}">example@example.com</span></p>
-		        <p><strong>自己紹介：</strong> <span th:text="${userProfile.profileText}">ここに自己紹介が入ります</span></p>
-		    </div>
-		
-		    <!-- デフォルトアイコンの時だけクレジット表記を表示 -->
-		    <div th:if="${userProfile.isDefaultIcon()}">
-		        <p style="font-size: 0.8em;">
-		            アイコンイラスト提供：
-		            <a href="https://www.ac-illust.com/" target="_blank" rel="noopener noreferrer">イラストAC</a>
-		        </p>
-		    </div>
-			<div>
-				<a class="btn-style" th:href="@{/userProfile/edit}">プロフィール編集</a>
-			</div>
-		</div>
-	</div>
 
+<body>
+    <header th:replace="~{header::headerArea}"></header>
+
+    <div class="wrapper">
+        <div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+        <div class="profileview-main">
+            <div class="main">
+                <div th:if="${successMessage}" class="alert alert-success" style="color: blue">
+                    <p th:text="${successMessage}"></p>
+                </div>
+
+                <h1 class="userProfile">ユーザプロフィール</h1>
+
+                <div>
+                    <!-- プロフィール画像 -->
+                    <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
+                </div>
+
+                <div class="profileview-main-contents">
+                    <p><strong>ユーザ名：</strong> <span th:text="${userProfile.userName}">ユーザ名</span></p>
+                    <p><strong>メールアドレス：</strong> <span th:text="${userProfile.email}">example@example.com</span></p>
+                    <p><strong>自己紹介：</strong> <span th:text="${userProfile.profileText}">ここに自己紹介が入ります</span></p>
+                </div>
+
+                <!-- デフォルトアイコンの時だけクレジット表記を表示 -->
+                <div th:if="${userProfile.isDefaultIcon()}">
+                    <p style="font-size: 0.8em;">
+                        アイコンイラスト提供：
+                        <a href="https://www.ac-illust.com/" target="_blank" rel="noopener noreferrer">イラストAC</a>
+                    </p>
+                </div>
+
+                <div>
+                    <a class="btn-style" th:href="@{/userProfile/edit}">プロフィール編集</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
