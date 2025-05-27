@@ -1,99 +1,308 @@
+/* ============================== */
+/* ヘッダー */
+/* ============================== */
 header {
-    height: 100px;
-    background-color: #808080;
+    height: 80px;
+    background-color: #4CAF50;
     position: relative;
 }
 
-.logout-btn {
+.header-btn {
     color: white;
-    border: solid 1px #CCFFFF;
-    border-radius: 10px;
-    padding: 5px;
+    border: solid 1px #ffffff;
+    border-radius: 5px;
+    padding: 8px 12px;
     position: absolute;
-    top: 30px;
-    right: 30px;
+    top: 20px;
+    right: 20px;
     text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 
+.header-btn:hover {
+    background-color: #45a049;
+}
+
+/* ============================== */
+/* レイアウト */
+/* ============================== */
 .wrapper {
     display: grid;
     grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 80px);
 }
 
 .sidebar {
-    width: 220px;
-    height: 600px;
-    background-color: #CCFFFF;
-}
-
-.side-btn {
-    color:black;
+    background-color: #f0f0f0;
+    padding: 20px 0;
 }
 
 .sidebar ul {
-    margin-top: 50px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .sidebar ul li {
-    margin: 10px 0;
+    margin: 15px 0;
+    text-align: center;
 }
 
-.main {
-    height: 600px;
+.side-btn {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
+.side-btn:hover {
+    background-color: #ddd;
+}
+
+/* ============================== */
+/* フォーム共通 */
+/* ============================== */
+.form-main-list {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 30px 24px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+}
+
+.form-main-list h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 22px;
+    color: #333;
+}
+
+.form-main-list label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #444;
+}
+
+.form-main-list input[type="text"],
+.form-main-list input[type="date"],
+.form-main-list select,
+.form-main-list textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.form-main-list textarea {
+    resize: vertical;
+}
+
+.form-main-list .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.form-main-list button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.form-main-list button:hover {
+    background-color: #45a049;
+}
+
+/* ============================== */
+/* ボタンなどの装飾 */
+/* ============================== */
+button, .btn-style {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover, .btn-style:hover {
+    background-color: #45a049;
+}
+
+/* ============================== */
+/* テーブル */
+/* ============================== */
+table {
+    width: 80%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin: 30px auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.detail-table {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.detail-table th, .detail-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.detail-table th {
+    background-color: #f9f9f9;
+    width: 30%;
+    font-weight: bold;
+}
+
+/* ============================== */
+/* その他 */
+/* ============================== */
 h1 {
     text-align: center;
-    text-decoration: underline;
+    font-size: 24px;
+    margin-top: 20px;
 }
 
-table {
-    margin: 0 auto;
-    border-radius: 10px;
+.alert {
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
 }
 
-.userProfile {
-	text-align: left;
+.alert-success {
+    color: blue;
 }
 
+.alert-error {
+    color: red;
+}
 
-/* 編集ボタン・一覧に戻るボタン・削除ボタン */
+body {
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+.new-btn-inline {
+    width: 90%;
+    margin: 10px auto 5px auto;
+	display: flex;
+	justify-content: center;
+}
+
+/* aタグをボタンのように見せる */
+.btn-style {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* お好みで */
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+}
+
 .btn1 {
     text-align: center;
 }
 
-.btn-style {
-    border: 1px solid #000;
-    padding: 5px 10px;
-    border-radius: 10px;
-    background-color: blanchedalmond;
-    opacity: 0.7;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: #000;
-    text-decoration: none;
-    transition: opacity 0.5s, background-color 0.5s;
+.form-btn2 {
+    margin: 0 10px;
 }
 
-.btn-style:hover {
-    opacity: 1;
-    background-color: burlywood;
+.login-main, .signup-main, .profileedit-main, .profileview-main {
+    text-align: center;
 }
 
-.summary-item {
+.login-main h1, .signup-main h1 {
+    text-align: center;
+}
+
+.form-place {
     display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    flex-direction: column;
+    align-items: center;
 }
 
-.summary-label {
-    font-weight: bold;
+.form-place .form-style {
+    padding: 10px 0;
+    font-size: 18px;
+    display: flex;
 }
 
-.summary-value {
-    font-size: 1.2em;
+.form-style label {
+    width: 150px;
+}
+
+.profileview-main-contents p {
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+.main-text {
+    font-size: 18px;
+    padding: 10px 0;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.detail-learning-title{
+	word-wrap: break-word;     /* 単語内で折り返し */
+	white-space: pre-wrap;     /* 改行と空白を保持したまま折り返し */
+	max-width: 500px;          /* 幅制限（必要に応じて調整） */
+}
+
+.detail-table{
+	table-layout: fixed;
+	width: 100%;
 }
 
 .suggest-container {
@@ -126,13 +335,13 @@ table {
   background-color: #f0f0f0;
 }
 
-.form-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1em;
-}
+/*.form-row {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  margin-bottom: 1em;*/
+/*}*/
 
-.form-row label {
-  margin-right: 8px;
-  min-width: 60px;
-}
+/*.form-row label {*/
+/*  margin-right: 8px;*/
+/*  min-width: 60px;*/
+/*}*/

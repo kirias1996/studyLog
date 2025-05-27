@@ -3,51 +3,60 @@
 <head>
     <title>日報詳細</title>
     <meta charset="UTF-8" />
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 	<header th:replace="~{header::headerArea}"></header>
 	
-    <h1>日報詳細</h1>
-
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>日付</th>
-            <td th:text="${reportRequestDto.learningDate}">2025-04-01</td>
-        </tr>
-        <tr>
-            <th>学習概要</th>
-            <td th:text="${reportRequestDto.title}">Java</td>
-        </tr>
-		<tr>
-            <th>学習内容</th>
-            <td th:text="${reportRequestDto.content}">Spring BootのREST APIを学習</td>
-        </tr>
-		<tr>
-			<th>タグ名</th>
-			<td th:text="${reportRequestDto.capitalizeDisplayTagName()}">Java</td>
-		</tr>
-        <tr>
-            <th>学習時間</th>
-            <td th:text="${reportRequestDto.displayLearningTimes}">0h</td>
-        </tr>
-    </table>
-
-    <br />
-
-    <div>
-		<form th:action="@{/reports/edit/{id}(id=${reportRequestDto.id})}" method="get" style="display: inline;">
-	        <button type="submit">編集</button>
-	    </form>
-
-	    <form th:action="@{/reports}" method="get" style="display: inline; margin-left: 10px;">
-	        <button type="submit">一覧に戻る</button>
-	    </form>
-    </div>
-
-    <!-- 削除ボタン -->
-    <form th:action="@{/reports/{id}(id=${reportRequestDto.id})}" method="post" style="margin-top: 10px;">
-        <input type="hidden" name="_method" value="delete" />
-        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-    </form>
+	<div class="wrapper">
+		<div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+		<div class="main">
+		    <h1>日報詳細</h1>
+		
+		    <table class="detail-table" border="1" cellpadding="8">
+		        <tr>
+		            <th>日付</th>
+		            <td th:text="${reportRequestDto.learningDate}">2025-04-01</td>
+		        </tr>
+		        <tr>
+		            <th>学習概要</th>
+		            <td class="detail-learning-title" th:text="${reportRequestDto.title}">Java</td>
+		        </tr>
+				<tr>
+		            <th>学習内容</th>
+		            <td class = "detail-learning-content" th:text="${reportRequestDto.content}">Spring BootのREST APIを学習</td>
+		        </tr>
+				<tr>
+					<th>タグ名</th>
+					<td th:text="${reportRequestDto.capitalizeDisplayTagName()}">Java</td>
+				</tr>
+		        <tr>
+		            <th>学習時間</th>
+		            <td th:text="${reportRequestDto.displayLearningTimes}">0h</td>
+		        </tr>
+		    </table>
+		
+		    <br />
+		
+		    <div class="new-btn-inline">
+				<a class="btn1 btn-style" th:href="@{/reports/edit/{id}(id=${reportRequestDto.id})}" style="display: inline;">編集</a>
+<!--				<form th:action="@{/reports/edit/{id}(id=${reportRequestDto.id})}" method="get" style="display: inline;">-->
+<!--			        <button type="submit">編集</button>-->
+<!--			    </form>-->
+		
+			    <form th:action="@{/reports}" method="get" style="display: inline; margin-left: 10px;">
+			        <button type="submit">一覧に戻る</button>
+			    </form>
+		    </div>
+		
+		    <!-- 削除ボタン -->
+			<div class="btn1">
+			    <form th:action="@{/reports/{id}(id=${reportRequestDto.id})}" method="post" style="margin-top: 10px;">
+			        <input type="hidden" name="_method" value="delete" />
+			        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+			    </form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

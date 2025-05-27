@@ -2,74 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>プロフィール編集</title>
+    <meta charset="UTF-8">
+    <title>プロフィール編集</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
+    <header th:replace="~{header::headerArea}"></header>
+    <div class="wrapper">
+        <div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <div class="profileedit-main">
+            <h1>プロフィール編集</h1>
 
-	<h1>プロフィール編集</h1>
+            <form th:action="@{/userProfile}" th:object="${userProfile}" method="post" enctype="multipart/form-data">
+                <div th:if="${#fields.hasErrors()}">
+                    <p style="color: red;">入力内容にエラーがあります。修正してください。</p>
+                </div>
 
-	<!-- プロフィール編集フォーム -->
-	<form th:action="@{/userProfile}" th:object="${userProfile}" method="post" enctype="multipart/form-data">
-		<!-- バリデーションエラー全体メッセージ -->
-		<div th:if="${#fields.hasErrors()}">
-			<p style="color: red;">入力内容にエラーがあります。修正してください。</p>
-		</div>
+                <div class="profileedit-main-contexts">
+                    <label class="main-text" for="email">メールアドレス</label><br>
+                    <input type="email" id="email" th:field="*{email}" readonly />
+                </div>
+                <br>
 
-		<!-- PUTメソッドを送信するためのhiddenフィールド -->
-<!--		<input type="hidden" name="_method" value="put" />-->
+                <div class="profileedit-main-contents">
+                    <label class="main-text" for="userName">ユーザ名</label><br>
+                    <input type="text" id="userName" th:field="*{userName}" />
+                    <div th:if="${#fields.hasErrors('userName')}" style="color: red;">
+                        <p th:errors="*{userName}">ユーザ名エラー</p>
+                    </div>
+                </div>
+                <br>
 
-		<!-- メールアドレス（出力専用） -->
-		<div>
-			<label for="email">メールアドレス</label><br>
-			<input type="email" id="email" th:field="*{email}" readonly />
-		</div>
+                <div class="profileedit-main-contents">
+                    <label class="main-text" for="profileText">プロフィール文</label><br>
+                    <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
+                    <div th:if="${#fields.hasErrors('profileText')}" style="color: red;">
+                        <p th:errors="*{profileText}">プロフィール文エラー</p>
+                    </div>
+                </div>
+                <br>
 
-		<br>
+                <div class="profileedit-main-contents">
+                    <label class="main-text" for="iconImage">アイコン画像</label><br>
+                    <input type="file" id="iconImage" name="iconImage" />
+                    <div th:if="${#fields.hasErrors('iconImage')}" style="color: red;">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
 
-		<!-- ユーザ名 -->
-		<div>
-			<label for="userName">ユーザ名</label><br>
-			<input type="text" id="userName" th:field="*{userName}" />
-			<div th:if="${#fields.hasErrors('userName')}" style="color: red;">
-				<p th:errors="*{userName}">ユーザ名エラー</p>
-			</div>
-		</div>
-
-		<br>
-
-		<!-- プロフィール文 -->
-		<div>
-			<label for="profileText">プロフィール文</label><br>
-			<textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
-			<div th:if="${#fields.hasErrors('profileText')}" style="color: red;">
-				<p th:errors="*{profileText}">プロフィール文エラー</p>
-			</div>
-		</div>
-
-		<br>
-
-		<!-- アイコン画像アップロード -->
-		<div>
-			<label for="iconImage">アイコン画像</label><br>
-			<input type="file" id="iconImage" name="iconImage" />
-			<div th:if="${#fields.hasErrors('iconImage')}" style="color: red;">
-			    <ul>
-			        <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
-			    </ul>
-			</div>
-
-		</div>
-		<input type="hidden" name="iconPublicId" th:value="*{iconPublicId}" />
-		<br>
-
-		<!-- 送信ボタン -->
-		<div>
-			<button type="submit">更新する</button>
-		</div>
-	</form>
-
+                <div>
+                    <button type="submit">更新する</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
