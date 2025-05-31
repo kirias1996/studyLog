@@ -26,36 +26,36 @@
                 <br>
 
                 <div class="profileedit-main-contents">
-                    <label class="main-text" for="userName">ユーザ名</label><br>
-                    <input type="text" id="userName" th:field="*{userName}" />
                     <div th:if="${#fields.hasErrors('userName')}" style="color: red;">
                         <p th:errors="*{userName}">ユーザ名エラー</p>
                     </div>
+                    <label class="main-text" for="userName">ユーザ名</label><br>
+                    <input type="text" id="userName" th:field="*{userName}" />
                 </div>
                 <br>
 
                 <div class="profileedit-main-contents">
-                    <label class="main-text" for="profileText">プロフィール文</label><br>
-                    <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
                     <div th:if="${#fields.hasErrors('profileText')}" style="color: red;">
                         <p th:errors="*{profileText}">プロフィール文エラー</p>
                     </div>
+                    <label class="main-text" for="profileText">プロフィール文</label><br>
+                    <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
                 </div>
                 <br>
 
                 <div class="profileedit-main-contents">
-                    <label class="main-text" for="iconImage">アイコン画像</label><br>
-                    <input type="file" id="iconImage" name="iconImage" />
                     <div th:if="${#fields.hasErrors('iconImage')}" style="color: red;">
                         <ul>
                             <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
                         </ul>
                     </div>
+                    <label class="main-text" for="iconImage">アイコン画像</label><br>
+                    <input type="file" id="iconImage" name="iconImage" />
                 </div>
                 <br>
 
                 <div>
-                    <button type="submit">更新する</button>
+                    <button type="submit">編集する</button>
                 </div>
             </form>
         </div>

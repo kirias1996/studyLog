@@ -58,6 +58,7 @@
 						    <option th:value="${i}" th:text="${i}">0</option>
 						  </th:block>
 						</select>
+						<div th:if="${#fields.hasErrors('validMinutes')}" th:errors="*{validMinutes}" style="color:red"></div>
 						<label>学習時間(分)</label>
 						<select id="learningMinutes" name="learningMinutes" th:field="*{learningMinutes}">
 						  <option value="0">0</option>
