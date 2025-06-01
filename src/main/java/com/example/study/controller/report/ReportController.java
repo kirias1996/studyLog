@@ -8,8 +8,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,16 +24,19 @@ import com.example.study.entity.User;
 import com.example.study.security.CustomUserDetails;
 import com.example.study.security.LoginUserProvider;
 import com.example.study.service.ReportService;
+import com.example.study.validation.ReportLearningTimesValidator;
 
 @Controller
 public class ReportController {
 
 	private final ReportService reportService;
 	private final LoginUserProvider loginUserProvider;
+	private final ReportLearningTimesValidator learningTimesValidator;
 
-	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider) {
+	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider,ReportLearningTimesValidator learningTimesValidator) {
 		this.reportService = reportService;
 		this.loginUserProvider = loginUserProvider;
+		this.learningTimesValidator = learningTimesValidator;
 	}
 
 	@GetMapping("/reports")
@@ -62,13 +67,17 @@ public class ReportController {
 		return "report-form";
 	}
 
+	@InitBinder("reportRequestDto")
+	protected void initBinder(WebDataBinder dataBinder) {
+		dataBinder.addValidators(learningTimesValidator);
+	}
 	/* 
 	 * @ModelAttributeを利用することで自動で値を設定可能
 	 * 入力フォームのname属性とDTOのフィールド名が対応していることが条件
 	 * エラー時でもDTOがモデルにセットされているので再入力の必要がない 
 	 * */
 	@PostMapping("/reports")
-	public String createReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,
+	public String createReport(@ModelAttribute("reportRequestDto") @Valid ReportRequestDto dto, BindingResult result,
 			RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		if (result.hasErrors()) {
 			return "report-form";
@@ -92,7 +101,7 @@ public class ReportController {
 	}
 
 	@PutMapping("/reports")
-	public String editReport(@ModelAttribute @Valid ReportRequestDto dto,
+	public String editReport(@ModelAttribute("reportRequestDto") @Valid ReportRequestDto dto,
 			BindingResult result, @AuthenticationPrincipal CustomUserDetails userDetails,
 			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
