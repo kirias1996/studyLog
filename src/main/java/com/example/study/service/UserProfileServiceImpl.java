@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import com.example.study.entity.User;
 import com.example.study.repository.UserRepository;
 import com.example.study.util.CloudinaryParamsHelper;
 import com.example.study.util.InputValidator;
+import com.example.study.util.message.MessageUtil;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService, ImageService {
@@ -25,10 +27,12 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 
 	private final UserRepository userRepository;
 	private final Cloudinary cloudinary;
+	private final MessageUtil messageUtil;
 
-	public UserProfileServiceImpl(UserRepository userRepository, Cloudinary cloudinary) {
+	public UserProfileServiceImpl(UserRepository userRepository, Cloudinary cloudinary,MessageUtil messageUtil) {
 		this.userRepository = userRepository;
 		this.cloudinary = cloudinary;
+		this.messageUtil = messageUtil;
 	}
 
 	@Override
@@ -85,8 +89,7 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 			if (InputValidator.isNotBlank(newPublicId)) {
 				deleteFile(newPublicId);
 			}
-
-			throw new RuntimeException("プロフィール更新に失敗しました。");
+			throw new RuntimeException(messageUtil.getMessage("updateUserProfile.error", null, LocaleContextHolder.getLocale()));
 		}
 	}
 
@@ -117,7 +120,7 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 			 * */
 			cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 		} catch (IOException e) {
-			System.err.println("ファイル削除に失敗しました。:");
+			System.err.println(messageUtil.getMessage("deleteIconImagefile.error", null, LocaleContextHolder.getLocale()));
 		}
 	}
 }

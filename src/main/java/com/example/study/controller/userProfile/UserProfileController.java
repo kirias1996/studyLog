@@ -3,6 +3,7 @@ package com.example.study.controller.userProfile;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import com.example.study.entity.User;
 import com.example.study.security.CustomUserDetails;
 import com.example.study.security.LoginUserProvider;
 import com.example.study.service.UserProfileService;
+import com.example.study.util.message.MessageUtil;
 import com.example.study.validation.UserProfileValidator;
 
 @Controller
@@ -30,12 +32,14 @@ public class UserProfileController {
 	private final UserProfileService userProfileService;
 	private final LoginUserProvider loginUserProvider;
 	private final UserProfileValidator userProfileValidator;
+	private final MessageUtil messageUtil;
 
 	public UserProfileController(UserProfileService userProfileService, LoginUserProvider loginUserProvider,
-			UserProfileValidator userProfileValidator) {
+			UserProfileValidator userProfileValidator, MessageUtil messageUtil) {
 		this.userProfileService = userProfileService;
 		this.loginUserProvider = loginUserProvider;
 		this.userProfileValidator = userProfileValidator;
+		this.messageUtil = messageUtil;
 	}
 
 	@GetMapping("/userProfile")
@@ -88,7 +92,8 @@ public class UserProfileController {
 		//ログインユーザの情報を取得してDB更新条件に利用
 		User user = loginUserProvider.getLoginUser(userDetails);
 		userProfileService.updateUserProfile(user, dto);
-		redirectAttributes.addFlashAttribute("successMessage", "プロフィール編集が完了しました。");
+		redirectAttributes.addFlashAttribute("successMessage",
+				messageUtil.getMessage("createUser.success", null, LocaleContextHolder.getLocale()));
 
 		return "redirect:/userProfile";
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import com.example.study.entity.User;
 import com.example.study.security.CustomUserDetails;
 import com.example.study.security.LoginUserProvider;
 import com.example.study.service.ReportService;
+import com.example.study.util.message.MessageUtil;
 import com.example.study.validation.ReportLearningTimesValidator;
 
 @Controller
@@ -32,11 +34,14 @@ public class ReportController {
 	private final ReportService reportService;
 	private final LoginUserProvider loginUserProvider;
 	private final ReportLearningTimesValidator learningTimesValidator;
+	private final MessageUtil messageUtil;
 
-	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider,ReportLearningTimesValidator learningTimesValidator) {
+	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider,
+			ReportLearningTimesValidator learningTimesValidator, MessageUtil messageUtil) {
 		this.reportService = reportService;
 		this.loginUserProvider = loginUserProvider;
 		this.learningTimesValidator = learningTimesValidator;
+		this.messageUtil = messageUtil;
 	}
 
 	@GetMapping("/reports")
@@ -71,6 +76,7 @@ public class ReportController {
 	protected void initBinder(WebDataBinder dataBinder) {
 		dataBinder.addValidators(learningTimesValidator);
 	}
+
 	/* 
 	 * @ModelAttributeを利用することで自動で値を設定可能
 	 * 入力フォームのname属性とDTOのフィールド名が対応していることが条件
@@ -84,7 +90,7 @@ public class ReportController {
 		}
 		dto.setUserId(loginUserProvider.getLoginUser(userDetails).getId());
 		reportService.createReport(dto);
-		redirectAttributes.addFlashAttribute("successMessage", "日報の登録が完了しました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("createReport.success",null,LocaleContextHolder.getLocale()));
 
 		return "redirect:/reports";
 	}
@@ -110,7 +116,8 @@ public class ReportController {
 		User user = loginUserProvider.getLoginUser(userDetails);
 
 		reportService.updateReport(dto, user.getId());
-		redirectAttributes.addFlashAttribute("successMessage", "日報の編集が完了しました。");
+		
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("updateReport.success",null,LocaleContextHolder.getLocale()));
 
 		return "redirect:/reports";
 	}
@@ -121,12 +128,12 @@ public class ReportController {
 		User user = loginUserProvider.getLoginUser(userDetails);
 
 		if (!reportService.existById(id)) {
-			redirectAttributes.addFlashAttribute("errorMessage", "指定された日報が見つかりませんでした。");
+			redirectAttributes.addFlashAttribute("errorMessage", messageUtil.getMessage("reportNotFound.error",null,LocaleContextHolder.getLocale())+"(ID:" + id + ")");
 			return "redirect:/reports";
 		}
 
 		reportService.deleteReport(id, user.getId());
-		redirectAttributes.addFlashAttribute("successMessage", "日報を削除しました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("deleteReport.success",null,LocaleContextHolder.getLocale()));
 		return "redirect:/reports";
 	}
 

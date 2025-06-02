@@ -1,15 +1,23 @@
 package com.example.study.validation;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.study.dto.UserProfileDto;
+import com.example.study.util.message.MessageUtil;
 
 @Component
 public class UserProfileValidator implements Validator {
 
+	private final MessageUtil messageUtil;
+	
+	public UserProfileValidator(MessageUtil messageUtil) {
+		this.messageUtil = messageUtil;
+	}
+	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		/*
@@ -37,14 +45,14 @@ public class UserProfileValidator implements Validator {
 		/*(?i)で大文字/小文字を区別しない正規表現マッチングを適用*/
 		if (file.getOriginalFilename() != null && !file.isEmpty()
 				&& !file.getOriginalFilename().matches("(?i)^.+\\.(png|jpg|jpeg)$")) {
-			errors.rejectValue("iconImage", "file.invalid", "対応していないファイル形式です。PNGまたはJPG形式の画像を指定してください。");
+			errors.rejectValue("iconImage", messageUtil.getMessage("validation.fileExtension.invalid", null, LocaleContextHolder.getLocale()));
 		}
 	}
 
 	private void validateMaxFileSize(MultipartFile file, Errors errors) {
 		// サイズチェック（2MB = 2 * 1024 * 1024）
 		if (file.getSize() > 2 * 1024 * 1024) {
-			errors.rejectValue("iconImage", "file.maxsize.over", "ファイルサイズが2MBを超えています。2MB以下の画像を指定してください。");
+			errors.rejectValue("iconImage", messageUtil.getMessage("validation.file.max.size.over", null, LocaleContextHolder.getLocale()));
 		}
 	}
 

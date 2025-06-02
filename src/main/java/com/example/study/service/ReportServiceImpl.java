@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.example.study.exception.ReportNotFoundException;
 import com.example.study.repository.ReportRepository;
 import com.example.study.repository.TagRepository;
 import com.example.study.util.TimeConverter;
+import com.example.study.util.message.MessageUtil;
 import com.example.study.validation.ReportTagValidator;
 
 @Service
@@ -31,10 +33,15 @@ public class ReportServiceImpl implements ReportService {
 	③テスト時にモック注入がしやすい*/
 	private final ReportRepository reportRepository;
 	private final TagRepository tagRepository;
+	private final MessageUtil messageUtil;
+	private final ReportTagValidator reportTagValidator;
 
-	public ReportServiceImpl(ReportRepository reportRepository, TagRepository tagRepository) {
+	public ReportServiceImpl(ReportRepository reportRepository, TagRepository tagRepository, MessageUtil messageUtil,
+			ReportTagValidator reportTagValidator) {
 		this.reportRepository = reportRepository;
 		this.tagRepository = tagRepository;
+		this.messageUtil = messageUtil;
+		this.reportTagValidator = reportTagValidator;
 	}
 
 	@Override
@@ -55,12 +62,15 @@ public class ReportServiceImpl implements ReportService {
 	public Report getReportById(int id) {
 
 		return reportRepository.findById(id)
-				.orElseThrow(() -> new ReportNotFoundException("日報が見つかりませんでした。(ID:" + id + ")"));
+				.orElseThrow(() -> new ReportNotFoundException(
+						messageUtil.getMessage("reportNotFound.error", null, LocaleContextHolder.getLocale()) + "(ID:"
+								+ id + ")"));
 	}
 
 	public void validateOwnership(Report report, int userId) {
 		if (report.getUserId() != userId) {
-			throw new AccessDeniedException("他ユーザの日報にはアクセスできません。");
+			throw new AccessDeniedException(
+					messageUtil.getMessage("reportAccessDenied.error", null, LocaleContextHolder.getLocale()));
 		}
 	}
 
@@ -71,7 +81,7 @@ public class ReportServiceImpl implements ReportService {
 
 		/* Controllerでのバリデーションが適用されないケースに備えた再チェック
 		   例)他のServiceクラスから直接呼び出された場合*/
-		ReportTagValidator.validateTagName(cleanedTagName);
+		reportTagValidator.validateTagName(cleanedTagName);
 		Tag tag = getTagForReport(tagRepository.findByTagName(cleanedTagName), cleanedTagName);
 
 		Report report = new Report();
@@ -124,7 +134,7 @@ public class ReportServiceImpl implements ReportService {
 		reportRequestDto.setDisplayLearningTimes(report.getLearningHours());
 		reportRequestDto.setTagId(report.getTag().getTagId());
 		reportRequestDto.setTagName(report.getTag().getTagName());
-		
+
 		return reportRequestDto;
 	}
 
@@ -132,7 +142,7 @@ public class ReportServiceImpl implements ReportService {
 	@Transactional
 	public void updateReport(ReportRequestDto dto, int userId) {
 		String cleanedTagName = normalizeTagName(dto.getTagName());
-		ReportTagValidator.validateTagName(cleanedTagName);
+		reportTagValidator.validateTagName(cleanedTagName);
 		// dtoについてはControllerクラスにてバリデーションチェック済み
 		Report report = getReportById(dto.getId());
 		validateOwnership(report, userId);
