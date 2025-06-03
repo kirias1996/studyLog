@@ -6,7 +6,8 @@ import java.util.List;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,17 +17,21 @@ public class ReportRequestDto {
 	private int id;
 
 	private int userId;
-
+	
+	@NotBlank(message="{validation.title.blank}")
+	@Size(max = 255, message = "{validation.title.sizeover}")
 	private String title;
 
+	@NotBlank(message="{validation.content.blank}")
+	@Size(max = 255, message = "{validation.content.sizeover}")
 	private String content;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-
+	@NotNull(message="{validation.learningDate.blank}")
 	private LocalDate learningDate;
 
-	@Min(0)
-	@Max(23)
+	@Min(value = 0,message="{validation.learningHours.invalid}")
+	@Max(value = 23,message="{validation.learningHours.invalid}")
 	private int learningHours;
 
 	private int learningMinutes;
@@ -35,8 +40,8 @@ public class ReportRequestDto {
 
 	private int tagId;
 
-	@NotEmpty(message = "タグ名を入力して下さい")
-	@Size(max = 20, message = "タグ名は{max}文字以内で入力してください")
+	@NotBlank(message = "{validation.tagName.blank}")
+	@Size(max = 20, message = "{validation.tagName.sizeover}")
 	private String tagName;
 
 	public ReportRequestDto() {
@@ -44,7 +49,7 @@ public class ReportRequestDto {
 	}
 
 	/*カスタムバリデーション*/
-	@AssertTrue(message = "分は0,15,30,45のいずれかを選択してください。")
+	@AssertTrue(message = "{validation.learningMinutes.invalid}")
 	public boolean isValidMinutes() {
 		return List.of(0, 15, 30, 45).contains(learningMinutes);
 	}

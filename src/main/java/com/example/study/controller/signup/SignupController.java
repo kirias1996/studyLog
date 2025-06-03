@@ -3,6 +3,7 @@ package com.example.study.controller.signup;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.UserCreateDto;
 import com.example.study.service.UserService;
+import com.example.study.util.message.MessageUtil;
 
 @Controller
 public class SignupController {
@@ -21,9 +23,11 @@ public class SignupController {
 	String defaultIconUrl;
 
 	private final UserService userService;
+	private final MessageUtil messageUtil;
 
-	public SignupController(UserService userService) {
+	public SignupController(UserService userService,MessageUtil messageUtil) {
 		this.userService = userService;
+		this.messageUtil = messageUtil;
 	}
 
 	@GetMapping("/signup")
@@ -41,18 +45,18 @@ public class SignupController {
 
 		//パスワード入力が一致しているかを確認
 		if (!userService.isPasswordMatch(dto)) {
-			model.addAttribute("errorMessage", "パスワードが一致しません。");
+			model.addAttribute("errorMessage", messageUtil.getMessage("login.password.cofirm.invalid.error",null,LocaleContextHolder.getLocale()));
 			return "signup";
 		}
 
 		//入力したemailアドレスが登録済みか確認(authテーブルのemailアドレスで検索をかける必要がある)
 		if (userService.isDuplicatedEmail(dto)) {
-			model.addAttribute("errorMessage", "入力されたメールアドレスは登録済みです。");
+			model.addAttribute("errorMessage", messageUtil.getMessage("login.duplicated.mailAddress.error",null,LocaleContextHolder.getLocale()));
 			return "signup";
 		}
 
 		userService.createUser(dto,defaultIconUrl);
-		redirectAttributes.addFlashAttribute("successMessage", "ユーザ登録が完了しました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("createUser.success",null,LocaleContextHolder.getLocale()));
 
 		return "redirect:/login";
 	}

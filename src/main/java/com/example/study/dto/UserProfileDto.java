@@ -10,11 +10,11 @@ public class UserProfileDto {
 	バリデーションチェックをしない*/
 	private String email;
 	
-	@NotBlank
-	@Size(max = 50,message="ユーザ名は{max}文字以内で入力してください。")
+	@NotBlank(message = "{validation.userName.blank}")
+	@Size(max = 50,message="{validation.userName.sizeover}")
 	private String userName;
 	
-	@Size(max = 255,message="プロフィール文は{max}文字以内で入力してください。")
+	@Size(max = 255,message="{validation.profileText.sizeover}")
 	private String profileText;
 	
 	private String iconUrl;

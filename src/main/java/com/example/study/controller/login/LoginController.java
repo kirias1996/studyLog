@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +20,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.study.dto.LoginFormDto;
 import com.example.study.security.CustomUserDetails;
+import com.example.study.util.message.MessageUtil;
 
 @Controller
 public class LoginController {
 
-	//	private final UserDetails userDetailsService;
-	//
-	//	public LoginController(UserDetails userDetailsService) {
-	//		this.userDetailsService = userDetailsService;
-	//	}
+	private final MessageUtil messageUtil;
+
+	public LoginController(MessageUtil messageUtil) {
+		this.messageUtil = messageUtil;
+	}
 
 	/*
 	 * ログイン成功後のリダイレクト処理はSecurityConfigクラスのfilterChainメソッドに記述した
@@ -39,7 +41,7 @@ public class LoginController {
 			Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		model.addAttribute("loginFormDto", new LoginFormDto());
 		if (error != null) {
-			model.addAttribute("errorMessage", "メールアドレス またはパスワードが正しくありません。");
+			model.addAttribute("errorMessage", messageUtil.getMessage("login.invalid.error",null,LocaleContextHolder.getLocale()));
 		}
 
 		// ユーザがログイン済みであればトップ画面に未ログインであればログイン画面に遷移		
@@ -52,7 +54,7 @@ public class LoginController {
 
 	@GetMapping("/logout-success")
 	public String logoutSuccess(RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("successMessage", "ログアウトしました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("logout.success",null,LocaleContextHolder.getLocale()));
 		return "redirect:/login";
 	}
 

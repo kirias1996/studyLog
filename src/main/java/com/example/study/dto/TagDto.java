@@ -1,7 +1,7 @@
 package com.example.study.dto;
 
 public class TagDto {
-
+	/*このクラスは画面表示用にしか利用していないためバリデーションチェックは未実装*/
 	private int tagId;
 	private String tagName;
 

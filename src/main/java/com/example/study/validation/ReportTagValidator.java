@@ -1,15 +1,28 @@
 package com.example.study.validation;
 
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
+
+import com.example.study.util.message.MessageUtil;
+
+@Component
 public class ReportTagValidator{
-	public static void validateTagName(String tagName) {
+	
+	private final MessageUtil messageUtil;
+	
+	public ReportTagValidator(MessageUtil messageUtil) {
+		this.messageUtil = messageUtil;
+	}
+	
+	public void validateTagName(String tagName) {
 		
 		//null or 空白だけの文字列は禁止
 		if (tagName == null || tagName.trim().isEmpty()) {
-			throw new  IllegalArgumentException("タグ名を入力してください。"); 
+			throw new  IllegalArgumentException(messageUtil.getMessage("validation.tagName.blank", null, LocaleContextHolder.getLocale())); 
 		}
 		
 		if(tagName.length()> 20) {
-			throw new  IllegalArgumentException("タグ名は20文字以内で入力してください。");
+			throw new  IllegalArgumentException(messageUtil.getMessage("input.tagName.sizeover", null, LocaleContextHolder.getLocale()));
 		}
 	}
 	

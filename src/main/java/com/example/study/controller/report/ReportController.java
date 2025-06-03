@@ -4,12 +4,15 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,16 +25,23 @@ import com.example.study.entity.User;
 import com.example.study.security.CustomUserDetails;
 import com.example.study.security.LoginUserProvider;
 import com.example.study.service.ReportService;
+import com.example.study.util.message.MessageUtil;
+import com.example.study.validation.ReportLearningTimesValidator;
 
 @Controller
 public class ReportController {
 
 	private final ReportService reportService;
 	private final LoginUserProvider loginUserProvider;
+	private final ReportLearningTimesValidator learningTimesValidator;
+	private final MessageUtil messageUtil;
 
-	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider) {
+	public ReportController(ReportService reportService, LoginUserProvider loginUserProvider,
+			ReportLearningTimesValidator learningTimesValidator, MessageUtil messageUtil) {
 		this.reportService = reportService;
 		this.loginUserProvider = loginUserProvider;
+		this.learningTimesValidator = learningTimesValidator;
+		this.messageUtil = messageUtil;
 	}
 
 	@GetMapping("/reports")
@@ -62,20 +72,25 @@ public class ReportController {
 		return "report-form";
 	}
 
+	@InitBinder("reportRequestDto")
+	protected void initBinder(WebDataBinder dataBinder) {
+		dataBinder.addValidators(learningTimesValidator);
+	}
+
 	/* 
 	 * @ModelAttributeを利用することで自動で値を設定可能
 	 * 入力フォームのname属性とDTOのフィールド名が対応していることが条件
 	 * エラー時でもDTOがモデルにセットされているので再入力の必要がない 
 	 * */
 	@PostMapping("/reports")
-	public String createReport(@ModelAttribute @Valid ReportRequestDto dto, BindingResult result,
+	public String createReport(@ModelAttribute("reportRequestDto") @Valid ReportRequestDto dto, BindingResult result,
 			RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetails userDetails) {
 		if (result.hasErrors()) {
 			return "report-form";
 		}
 		dto.setUserId(loginUserProvider.getLoginUser(userDetails).getId());
 		reportService.createReport(dto);
-		redirectAttributes.addFlashAttribute("successMessage", "日報の登録が完了しました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("createReport.success",null,LocaleContextHolder.getLocale()));
 
 		return "redirect:/reports";
 	}
@@ -92,7 +107,7 @@ public class ReportController {
 	}
 
 	@PutMapping("/reports")
-	public String editReport(@ModelAttribute @Valid ReportRequestDto dto,
+	public String editReport(@ModelAttribute("reportRequestDto") @Valid ReportRequestDto dto,
 			BindingResult result, @AuthenticationPrincipal CustomUserDetails userDetails,
 			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
@@ -101,7 +116,8 @@ public class ReportController {
 		User user = loginUserProvider.getLoginUser(userDetails);
 
 		reportService.updateReport(dto, user.getId());
-		redirectAttributes.addFlashAttribute("successMessage", "日報の編集が完了しました。");
+		
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("updateReport.success",null,LocaleContextHolder.getLocale()));
 
 		return "redirect:/reports";
 	}
@@ -112,12 +128,12 @@ public class ReportController {
 		User user = loginUserProvider.getLoginUser(userDetails);
 
 		if (!reportService.existById(id)) {
-			redirectAttributes.addFlashAttribute("errorMessage", "指定された日報が見つかりませんでした。");
+			redirectAttributes.addFlashAttribute("errorMessage", messageUtil.getMessage("reportNotFound.error",null,LocaleContextHolder.getLocale())+"(ID:" + id + ")");
 			return "redirect:/reports";
 		}
 
 		reportService.deleteReport(id, user.getId());
-		redirectAttributes.addFlashAttribute("successMessage", "日報を削除しました。");
+		redirectAttributes.addFlashAttribute("successMessage", messageUtil.getMessage("deleteReport.success",null,LocaleContextHolder.getLocale()));
 		return "redirect:/reports";
 	}
 

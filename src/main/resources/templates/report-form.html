@@ -14,9 +14,13 @@
 		<div class="form-main">
 			<div class ="form-main-list">
 			    <h1 th:text="${isEdit} ? '日報編集' : '日報登録'">日報フォーム</h1>
-			
 			    <form th:action="@{${isEdit} ? '/reports' : '/reports'}"
 			          th:object="${reportRequestDto}" method="post">
+					<div th:if="${#fields.hasGlobalErrors()}" style="color:red">
+					  <ul class="error-list">
+					    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+					  </ul>
+					</div>
 					<!-- isEdit が true のときだけ PUT 指定の hidden フィールドを出力 -->
 					<input type="hidden" name="_method" value="put" th:if="${isEdit}" />
 							  
@@ -49,7 +53,6 @@
 							<ul id="suggestionList"></ul>
 						</div>
 			        </div>
-			
 			        <div>
 						<div th:if="${#fields.hasErrors('learningHours')}" th:errors="*{learningHours}" style="color:red"></div>
 			            <label>学習時間(時間)</label>
@@ -58,6 +61,7 @@
 						    <option th:value="${i}" th:text="${i}">0</option>
 						  </th:block>
 						</select>
+						<div th:if="${#fields.hasErrors('validMinutes')}" th:errors="*{validMinutes}" style="color:red"></div>
 						<label>学習時間(分)</label>
 						<select id="learningMinutes" name="learningMinutes" th:field="*{learningMinutes}">
 						  <option value="0">0</option>
