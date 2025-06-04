@@ -24,6 +24,9 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 
 	@Value("${app.default-icon-path}")
 	String defaultIconUrl;
+	
+	@Value("${cloudinary.upload.folder}")
+	String uploadFolder;
 
 	private final UserRepository userRepository;
 	private final Cloudinary cloudinary;
@@ -65,27 +68,27 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 	public void updateUserProfile(User user, UserProfileDto dto) {
 		Map<String, Object> result = null;
 		String newPublicId = null;
+		String oldPublicId = user.getIconPublicId();
 		try {
-			if (!InputValidator.isNotEmpty(dto.getIconImage())) {
-				return;
+			if (InputValidator.isNotEmpty(dto.getIconImage())) {
+				newPublicId = "user_" + user.getId() + "_" + UUID.randomUUID();
+				Map<String, Object> optionParameters = CloudinaryParamsHelper.defaultParams(newPublicId,uploadFolder);
+				result = upload(dto.getIconImage(), optionParameters);
+				user.setIconUrl(result.get("secure_url").toString());
+				newPublicId = result.get("public_id").toString();
+				user.setIconPublicId(newPublicId);
 			}
-			newPublicId = "user_" + user.getId() + "_" + UUID.randomUUID();
-			Map<String, Object> optionParameters = CloudinaryParamsHelper.defaultParams(newPublicId);
-			result = upload(dto.getIconImage(), optionParameters);
-			user.setIconUrl(result.get("secure_url").toString());
-			user.setIconPublicId(newPublicId);
 			user.setUserName(dto.getUserName());
 			user.setProfileText(dto.getProfileText());
 			userRepository.save(user);
 
-			if (shouldDeleteOldIcon(dto)) {
-				deleteFile(dto.getIconPublicId());
+			if (shouldDeleteOldIcon(dto,oldPublicId)) {
+				deleteFile(oldPublicId);
 			}
 
 		} catch (Exception e) {
 
 			//DB更新失敗時に保存済みアップロードファイルを削除
-			//String resultPublicId = (String) result.get("public_id");
 			if (InputValidator.isNotBlank(newPublicId)) {
 				deleteFile(newPublicId);
 			}
@@ -93,8 +96,8 @@ public class UserProfileServiceImpl implements UserProfileService, ImageService 
 		}
 	}
 
-	private boolean shouldDeleteOldIcon(UserProfileDto dto) {
-		return InputValidator.isNotBlank(dto.getIconPublicId())
+	private boolean shouldDeleteOldIcon(UserProfileDto dto,String oldPublicId) {
+		return InputValidator.isNotBlank(oldPublicId)
 				&& !dto.isDefaultIcon()
 				&& InputValidator.isNotEmpty(dto.getIconImage());
 	}

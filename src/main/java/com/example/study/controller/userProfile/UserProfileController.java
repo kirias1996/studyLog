@@ -93,7 +93,7 @@ public class UserProfileController {
 		User user = loginUserProvider.getLoginUser(userDetails);
 		userProfileService.updateUserProfile(user, dto);
 		redirectAttributes.addFlashAttribute("successMessage",
-				messageUtil.getMessage("createUser.success", null, LocaleContextHolder.getLocale()));
+				messageUtil.getMessage("editUserProfile.success", null, LocaleContextHolder.getLocale()));
 
 		return "redirect:/userProfile";
 	}
