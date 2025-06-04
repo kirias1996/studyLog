@@ -10,10 +10,11 @@ public class CloudinaryParamsHelper {
 		
 	}
 
-	public static Map<String, Object> defaultParams(String publicId) {
+	public static Map<String, Object> defaultParams(String publicId,String uploadFolder) {
 		return ObjectUtils.asMap(
 				"public_id", publicId,
-				"overwrite", true
+				"overwrite", true,
+				"folder",uploadFolder
 				);
 	}
 

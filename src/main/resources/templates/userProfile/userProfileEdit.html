@@ -42,13 +42,15 @@
                     <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
                 </div>
                 <br>
-
                 <div class="profileedit-main-contents">
                     <div th:if="${#fields.hasErrors('iconImage')}" style="color: red;">
                         <ul>
                             <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
                         </ul>
                     </div>
+					<div>
+	                    <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
+	                </div>
                     <label class="main-text" for="iconImage">アイコン画像</label><br>
                     <input type="file" id="iconImage" name="iconImage" />
                 </div>
