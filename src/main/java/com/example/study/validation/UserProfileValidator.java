@@ -11,12 +11,6 @@ import com.example.study.util.message.MessageUtil;
 
 @Component
 public class UserProfileValidator implements Validator {
-
-	private final MessageUtil messageUtil;
-	
-	public UserProfileValidator(MessageUtil messageUtil) {
-		this.messageUtil = messageUtil;
-	}
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -45,14 +39,14 @@ public class UserProfileValidator implements Validator {
 		/*(?i)で大文字/小文字を区別しない正規表現マッチングを適用*/
 		if (file.getOriginalFilename() != null && !file.isEmpty()
 				&& !file.getOriginalFilename().matches("(?i)^.+\\.(png|jpg|jpeg)$")) {
-			errors.rejectValue("iconImage", messageUtil.getMessage("validation.fileExtension.invalid", null, LocaleContextHolder.getLocale()));
+			errors.rejectValue("iconImage", "validation.fileExtension.invalid");
 		}
 	}
 
 	private void validateMaxFileSize(MultipartFile file, Errors errors) {
 		// サイズチェック（2MB = 2 * 1024 * 1024）
 		if (file.getSize() > 2 * 1024 * 1024) {
-			errors.rejectValue("iconImage", messageUtil.getMessage("validation.file.max.size.over", null, LocaleContextHolder.getLocale()));
+			errors.rejectValue("iconImage", "validation.file.max.size.over");
 		}
 	}
 

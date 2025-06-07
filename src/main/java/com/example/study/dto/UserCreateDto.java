@@ -17,8 +17,8 @@ public class UserCreateDto {
 	@Size(min=8,max=72,message="{validation.password.size}")
 	private String password;
 	
-	@NotBlank(message="{validation.password.blank}")
-	@Size(min=8,max=72,message="{validation.password.size}")
+	@NotBlank(message="{validation.passwordConfirm.blank}")
+	@Size(min=8,max=72,message="{validation.passwordConfirm.size}")
 	private String confirmPassword;
 	
 	public UserCreateDto() {
