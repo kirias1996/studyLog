@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>日報一覧</title>
-    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -16,20 +16,15 @@
         <div class="report-main">
             <h1>学習日報一覧</h1>
 
-            <div th:if="${successMessage}" class="alert alert-success" style="color: blue">
-                <p th:text="${successMessage}"></p>
-            </div>
+            <p th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></p>
 
-            <div th:if="${errorMessage}" class="alert alert-success" style="color: red">
-                <p th:text="${errorMessage}"></p>
-            </div>
+            <p th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></p>
 
             <table border="1">
                 <thead>
                     <tr>
                         <th>学習日付</th>
                         <th>タイトル</th>
-<!--                        <th>内容</th>-->
                         <th>学習時間（h）</th>
                         <th>操作</th>
                     </tr>
@@ -38,31 +33,22 @@
                     <tr class="form-width" th:each="report : ${reportRequestDto}">
                         <td th:text="${report.learningDate}"></td>
                         <td th:text="${report.title.length() > 30} ? ${report.title.substring(0, 30)} + '…' : ${report.title}"></td>
-<!--                        <td th:text="${report.content}"></td>-->
                         <td th:text="${report.displayLearningTimes}"></td>
                         <td>
-                            <!-- 詳細ボタン -->
-                            <form class="form-btn2" th:action="@{'/reports/' + ${report.id}}" method="get" style="display:inline;">
-                                <button type="submit">詳細</button>
-                            </form>
-                            <!-- 更新ボタン -->
-                            <form class="form-btn2" th:action="@{'/reports/edit/' + ${report.id}}" method="get" style="display:inline;">
-                                <button type="submit">編集</button>
-                            </form>
-                            <!-- 削除ボタン -->
-                            <form class="form-btn2" th:action="@{'/reports/' + ${report.id}}" method="post" style="display:inline;">
-                                <input type="hidden" name="_method" value="delete" />
-                                <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-                            </form>
+							<div class="new-btn-inline">
+								<a class="btn1 btn-style" th:href="@{'/reports/' + ${report.id}}">詳細</a>
+								<a class="btn1 btn-style" th:href="@{'/reports/edit/' + ${report.id}}">編集</a>
+	                            <form class="form-btn2" th:action="@{'/reports/' + ${report.id}}" method="post">
+	                                <input type="hidden" name="_method" value="delete" />
+	                                <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+	                            </form>
+						    </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="new-btn-inline">
 				<a class="btn1 btn-style" th:href="@{/reports/create}">新規登録</a>
-<!--                <form class="btn1" th:action="@{/reports/create}" method="get">-->
-<!--                    <button class="btn-style" type="submit">新規登録</button>-->
-<!--                </form>-->
             </div>
         </div>
     </div>

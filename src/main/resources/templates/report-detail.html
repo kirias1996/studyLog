@@ -39,19 +39,13 @@
 		    <br />
 		
 		    <div class="new-btn-inline">
-				<a class="btn1 btn-style" th:href="@{/reports/edit/{id}(id=${reportRequestDto.id})}" style="display: inline;">編集</a>
-<!--				<form th:action="@{/reports/edit/{id}(id=${reportRequestDto.id})}" method="get" style="display: inline;">-->
-<!--			        <button type="submit">編集</button>-->
-<!--			    </form>-->
-		
-			    <form th:action="@{/reports}" method="get" style="display: inline; margin-left: 10px;">
-			        <button type="submit">一覧に戻る</button>
-			    </form>
+				<a class="btn1 btn-style" th:href="@{/reports/edit/{id}(id=${reportRequestDto.id})}">編集</a>
+				<a class="btn1 btn-style" th:href="@{/reports}">一覧に戻る</a>
 		    </div>
 		
 		    <!-- 削除ボタン -->
 			<div class="btn1">
-			    <form th:action="@{/reports/{id}(id=${reportRequestDto.id})}" method="post" style="margin-top: 10px;">
+			    <form th:action="@{/reports/{id}(id=${reportRequestDto.id})}" method="post">
 			        <input type="hidden" name="_method" value="delete" />
 			        <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
 			    </form>
