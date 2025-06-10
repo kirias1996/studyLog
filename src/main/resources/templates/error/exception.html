@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${errorTitle}">エラーページ</title>
-</head>
-<body>
-    <h1 th:text="${errorMessage}"></h1>
-    <a th:href="@{/reports}">日報一覧画面に戻る</a>
-</body>
-</html>
 
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${errorTitle}">エラーページ</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<header th:replace="~{header::headerArea}"></header>
+	<div class="error-wrapper">
+		<div class="error-box">
+			<h1 th:text="${errorMessage}"></h1>
+			<a th:href="@{/reports}">日報一覧画面に戻る</a>
+		</div>
+	</div>
+</body>
+
+</html>
