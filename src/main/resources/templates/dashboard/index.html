@@ -9,24 +9,26 @@
 
 <body>
 	<header th:replace="~{header::headerArea}"></header>
-	<div class="wrapper">
+
+	<div class="dashboard-wrapper">
 		<div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
-		<div class="main">
-		    <div class="summary-item">
-		        <span class="summary-label">日報投稿日数:</span>
-		        <span class="summary-value" th:text="${postCount}+'day'">5</span>
-		    </div>
-		    <div class="summary-item">
-		        <span class="summary-label">総合学習時間:</span>
-		        <span class="summary-value" th:text="${totalStudyTime}+'h'">10時間</span>
-		    </div>
-		    <div class="summary-item">
-		        <span class="summary-label">連続投稿日数:</span>
-		        <span class="summary-value" th:text="${streakCount}+'day'">3日</span>
-		    </div>
+		<div class="dashboard-container">
+			<div class="dashboard">
+				<div class="summary-item">
+					<span class="summary-label">日報投稿日数:</span>
+					<span class="summary-value" th:text="${postCount}+'day'">1day</span>
+				</div>
+				<div class="summary-item">
+					<span class="summary-label">総合学習時間:</span>
+					<span class="summary-value" th:text="${totalStudyTime}+'h'">1.0h</span>
+				</div>
+				<div class="summary-item">
+					<span class="summary-label">連続投稿日数:</span>
+					<span class="summary-value" th:text="${streakCount}+'day'">1day</span>
+				</div>
+			</div>
 		</div>
 	</div>
-	
 </body>
 
 </html>
