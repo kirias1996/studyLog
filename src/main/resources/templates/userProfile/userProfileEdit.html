@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>プロフィール編集</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+	<script src="/js/fileSizeCheck.js"></script>
 </head>
 
 <body>
@@ -15,9 +16,7 @@
             <h1>プロフィール編集</h1>
 
             <form th:action="@{/userProfile}" th:object="${userProfile}" method="post" enctype="multipart/form-data">
-                <div th:if="${#fields.hasErrors()}">
-                    <p style="color: red;">入力内容にエラーがあります。修正してください。</p>
-                </div>
+            	<p th:if="${#fields.hasErrors()}" class="alert alert-error">入力内容にエラーがあります。修正してください。</p>
 
                 <div class="profileedit-main-contexts">
                     <label class="main-text" for="email">メールアドレス</label><br>
@@ -26,31 +25,29 @@
                 <br>
 
                 <div class="profileedit-main-contents">
-                    <div th:if="${#fields.hasErrors('userName')}" style="color: red;">
-                        <p th:errors="*{userName}">ユーザ名エラー</p>
-                    </div>
+                    <p class="alert alert-error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">ユーザ名エラー</p>
                     <label class="main-text" for="userName">ユーザ名</label><br>
                     <input type="text" id="userName" th:field="*{userName}" />
                 </div>
                 <br>
 
                 <div class="profileedit-main-contents">
-                    <div th:if="${#fields.hasErrors('profileText')}" style="color: red;">
-                        <p th:errors="*{profileText}">プロフィール文エラー</p>
-                    </div>
+                    <p class="alert alert-error" th:if="${#fields.hasErrors('profileText')}" th:errors="*{profileText}">プロフィール文エラー</p>
                     <label class="main-text" for="profileText">プロフィール文</label><br>
                     <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
                 </div>
                 <br>
                 <div class="profileedit-main-contents">
-                    <div th:if="${#fields.hasErrors('iconImage')}" style="color: red;">
+                    <div class="alert alert-error" th:if="${#fields.hasErrors('iconImage')}">
                         <ul>
                             <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
                         </ul>
                     </div>
+					<p class="alert alert-error" id="fileSizeError"></p>
 					<div>
 	                    <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
 	                </div>
+					<input type ="hidden" th:field="*{iconUrl}">
                     <label class="main-text" for="iconImage">アイコン画像</label><br>
                     <input type="file" id="iconImage" name="iconImage" />
                 </div>

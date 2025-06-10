@@ -15,12 +15,8 @@
 
         <div class="profileview-main">
             <div class="main">
-                <div th:if="${successMessage}" class="alert alert-success" style="color: blue">
-                    <p th:text="${successMessage}"></p>
-                </div>
-
                 <h1 class="userProfile">ユーザプロフィール</h1>
-
+				<p th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></p>
                 <div>
                     <!-- プロフィール画像 -->
                     <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">

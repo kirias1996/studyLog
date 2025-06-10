@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>日報が見つかりません</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <h1>お探しの日報は見つかりませんでした。</h1>
-    <p th:text="${errorMessage}"></p>
-    <a th:href="@{/reports}">日報一覧画面に戻る</a>
+    <header th:replace="~{header::headerArea}"></header>
+
+    <div class="error-wrapper">
+        <div class="error-box">
+            <h1>お探しの日報は見つかりませんでした。</h1>
+            <p th:text="${errorMessage}"></p>
+            <a th:href="@{/reports}">日報一覧画面に戻る</a>
+        </div>
+    </div>
 </body>
 </html>
-

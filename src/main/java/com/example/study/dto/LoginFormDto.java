@@ -2,6 +2,7 @@ package com.example.study.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class LoginFormDto {
 
@@ -10,6 +11,7 @@ public class LoginFormDto {
 	private String email;
 	
 	@NotBlank(message = "{validation.password.blank}")
+	@Size(min=8,max=72,message="{validation.password.size}")
 	private String password;
 
 	public LoginFormDto() {

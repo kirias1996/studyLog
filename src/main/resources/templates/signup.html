@@ -13,13 +13,8 @@
     <div class="signup-main">
         <h1>ユーザー登録</h1>
 
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-
-        <div th:if="${errorMessage}" class="alert alert-error">
-            <p th:text="${errorMessage}"></p>
-        </div>
+        <p th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success"></p>
+		<p th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></p>
 
         <form class="form-place" th:action="@{/signup}" th:object="${userCreateDto}" method="post">
             <div class="form-style">
@@ -27,11 +22,13 @@
                 <input type="email" id="email" th:field="*{email}" required />
             </div>
 
+			<p class="alert alert-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
             <div class="form-style">
                 <label for="password">パスワード:</label>
                 <input type="password" id="password" th:field="*{password}" required />
             </div>
 
+			<p class="alert alert-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
             <div class="form-style">
                 <label for="confirmPassword">パスワード確認:</label>
                 <input type="password" id="confirmPassword" th:field="*{confirmPassword}" required />
