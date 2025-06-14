@@ -1,13 +1,11 @@
 package com.example.study.validation;
 
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.study.dto.UserProfileDto;
-import com.example.study.util.message.MessageUtil;
 
 @Component
 public class UserProfileValidator implements Validator {

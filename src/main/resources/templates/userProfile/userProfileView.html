@@ -23,9 +23,12 @@
                 </div>
 
                 <div class="profileview-main-contents">
-                    <p><strong>ユーザ名：</strong> <span th:text="${userProfile.userName}">ユーザ名</span></p>
-                    <p><strong>メールアドレス：</strong> <span th:text="${userProfile.email}">example@example.com</span></p>
-                    <p><strong>自己紹介：</strong> <span th:text="${userProfile.profileText}">ここに自己紹介が入ります</span></p>
+                    <p>ユーザ名：<span th:text="${userProfile.userName}">ユーザ名</span></p>
+                    <p>メールアドレス：<span th:text="${userProfile.email}">example@example.com</span></p>
+					<div class = "profile-section">
+						<p class = "profile-section-label">自己紹介：</p>
+	                    <p class = "profile-text" th:text="${userProfile.profileText}">ここに自己紹介が入ります</p>						
+					</div>
                 </div>
 
                 <!-- デフォルトアイコンの時だけクレジット表記を表示 -->
