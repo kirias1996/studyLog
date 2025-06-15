@@ -22,7 +22,7 @@ public class SecurityConfig {
 					.loginProcessingUrl("/auth/login")
 					.loginPage("/login")
 					.usernameParameter("email")
-					.defaultSuccessUrl("/dashboard")
+					.defaultSuccessUrl("/dashboard",true)
 					.failureUrl("/login?error")
 					.permitAll())
 				.logout(logout -> logout

@@ -263,10 +263,32 @@ body {
 
 .login-main,
 .signup-main,
-.profileedit-main,
-.profileview-main {
+.profileedit-main {
 	text-align: center;
+	max-width: 800px;
+	margin: 40px auto;
+	padding: 30px 24px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	margin-bottom: 0;
 }
+
+.profileview-main {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	flex: 1; 
+	text-align: center;
+	max-width: 800px;
+	margin: 40px auto;
+	padding: 30px 24px;
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+}
+
 
 .login-main h1,
 .signup-main h1 {
@@ -294,6 +316,58 @@ body {
 	font-size: 18px;
 }
 
+.form-row {
+	display: flex;
+	align-items: center;
+}
+
+.form-row label {
+	width: 110px;
+	font-weight: bold;
+	font-size: 14px;
+	margin-right: 10px;
+	text-align: right;
+}
+
+.form-row input[type="text"],
+.form-row input[type="email"] {
+	flex: 1;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+}
+
+.form-row textarea {
+	flex: 1;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	resize: vertical;
+}
+
+.form-center {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile-section {
+	margin-top: 24px;
+	text-align: left;
+}
+
+.profile-section-label {
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+
+.profile-text {
+	white-space: pre-wrap;
+	font-size: 16px;
+	line-height: 1.6;
+}
+
 .main-text {
 	font-size: 18px;
 	padding: 10px 0;
@@ -316,7 +390,6 @@ body {
 .suggest-container {
 	position: relative;
 	width: 300px;
-	/* 適宜調整 */
 }
 
 #suggestionList {
@@ -353,89 +426,87 @@ body {
 
 /* ダッシュボードページのCSS */
 .dashboard-wrapper {
-  display: flex;
-  background-color: #f5f7fa;
-  min-height: calc(100vh - 60px); /* ヘッダー高さ分を引く */
+	display: flex;
+	background-color: #f5f7fa;
+	min-height: calc(100vh - 60px);
 }
 
 .sidebar {
-  width: 200px;
-  background-color: #eee; /* 任意 */
-  flex-shrink: 0;
+	width: 200px;
+	background-color: #eee;
+	flex-shrink: 0;
 }
 
 .dashboard-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	padding: 40px 20px;
 }
 
-/* 中央の白いボックス */
 .dashboard {
-  width: 100%;
-  max-width: 380px;
-  padding: 20px 24px;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	width: 100%;
+	max-width: 380px;
+	padding: 20px 24px;
+	background-color: #fff;
+	border-radius: 16px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* 情報の行ごとに整える */
 .summary-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  font-size: 1.1rem;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 16px;
+	font-size: 1.1rem;
 }
 
 .summary-label {
-  font-weight: bold;
-  color: #333;
+	font-weight: bold;
+	color: #333;
 }
 
 .summary-value {
-  color: #4CAF50;
+	color: #4CAF50;
 }
 
 .error-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 80px); /* ヘッダー除いた全体高さ */
-  background-color: #f5f7fa;
-  padding: 40px 16px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: calc(100vh - 80px);
+	background-color: #f5f7fa;
+	padding: 40px 16px;
 }
 
 .error-box {
-  background-color: #fff;
-  padding: 32px;
-  border-radius: 12px;
-  max-width: 480px;
-  width: 100%;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  text-align: center;
+	background-color: #fff;
+	padding: 32px;
+	border-radius: 12px;
+	max-width: 480px;
+	width: 100%;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+	text-align: center;
 }
 
 .error-box h1 {
-  color: #d32f2f;
-  font-size: 1.4rem;
-  margin-bottom: 16px;
+	color: #d32f2f;
+	font-size: 1.4rem;
+	margin-bottom: 16px;
 }
 
 .error-box p {
-  color: #555;
-  font-size: 1rem;
-  margin-bottom: 24px;
+	color: #555;
+	font-size: 1rem;
+	margin-bottom: 24px;
 }
 
 .error-box a {
-  display: inline-block;
-  color: #fff;
-  background-color: #4CAF50;
-  padding: 10px 20px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
+	display: inline-block;
+	color: #fff;
+	background-color: #4CAF50;
+	padding: 10px 20px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: bold;
 }

@@ -20,7 +20,7 @@ public class DashboardController {
 		this.loginUserProvider = loginUserProvider;
 	}
 	
-	@GetMapping("/dashboard")
+	@GetMapping({"/dashboard","/"})
 	public String showDashboard(@AuthenticationPrincipal CustomUserDetails userDetails,Model model) {
 		User user = loginUserProvider.getLoginUser(userDetails);
 		model.addAttribute("postCount", reportService.getTotalLearningDays(user.getId()));
