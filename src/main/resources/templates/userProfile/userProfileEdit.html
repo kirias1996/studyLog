@@ -25,26 +25,26 @@
 	                </div>
 	                <br>
 	
+                    <p class="alert alert-error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">ユーザ名エラー</p>
 	                <div class="form-row">
-	                    <p class="alert alert-error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">ユーザ名エラー</p>
 	                    <label class="main-text" for="userName">ユーザ名:</label><br>
 	                    <input type="text" id="userName" th:field="*{userName}" />
 	                </div>
 	                <br>
 	
+                    <p class="alert alert-error" th:if="${#fields.hasErrors('profileText')}" th:errors="*{profileText}">プロフィール文エラー</p>
 	                <div class="form-row">
-	                    <p class="alert alert-error" th:if="${#fields.hasErrors('profileText')}" th:errors="*{profileText}">プロフィール文エラー</p>
 	                    <label class="main-text" for="profileText">プロフィール文:</label><br>
 	                    <textarea id="profileText" th:field="*{profileText}" rows="5" cols="40"></textarea>
 	                </div>
 	                <br>
+                    <div class="alert alert-error" th:if="${#fields.hasErrors('iconImage')}">
+                        <ul class="no-bullet">
+                            <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+					<p class="alert alert-error" id="fileSizeError"></p>
 	                <div class="form-center">
-	                    <div class="alert alert-error" th:if="${#fields.hasErrors('iconImage')}">
-	                        <ul>
-	                            <li th:each="err : ${#fields.errors('iconImage')}" th:text="${err}"></li>
-	                        </ul>
-	                    </div>
-						<p class="alert alert-error" id="fileSizeError"></p>
 						<div>
 		                    <img th:src="@{${userProfile.iconUrl}}" alt="プロフィール画像" width="150" height="150">
 		                </div>
