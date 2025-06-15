@@ -109,8 +109,9 @@ public class ReportController {
 	@PutMapping("/reports")
 	public String editReport(@ModelAttribute("reportRequestDto") @Valid ReportRequestDto dto,
 			BindingResult result, @AuthenticationPrincipal CustomUserDetails userDetails,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,Model model) {
 		if (result.hasErrors()) {
+			model.addAttribute("isEdit", true);
 			return "report-form";
 		}
 		User user = loginUserProvider.getLoginUser(userDetails);
